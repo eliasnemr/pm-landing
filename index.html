@@ -1,618 +1,892 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PadelMatch</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PadelGo — Play. Book. Dominate.</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);background:var(--color-background-tertiary);min-height:100vh}
-:root{--font-sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--teal:#1D9E75;--teal-light:#E1F5EE;--teal-dark:#0F6E56;--purple:#7F77DD;--purple-light:#EEEDFE;--amber:#EF9F27;--amber-light:#FAEEDA;--coral:#D85A30;--coral-light:#FAECE7;--gray-light:#F1EFE8;--color-background-primary:#fff;--color-background-secondary:#f6f5f2;--color-background-tertiary:var(--gray-light);--color-border-tertiary:rgba(0,0,0,.12);--color-border-secondary:rgba(0,0,0,.18);--color-text-primary:#1a1a1a;--color-text-secondary:#5c5b55;--color-text-tertiary:#8a887f;--border-radius-lg:12px;--border-radius-md:8px}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.app{min-height:600px;display:flex;flex-direction:column}
-.top-nav{display:flex;align-items:center;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);padding:0 1rem;background:var(--color-background-primary);border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0}
-.brand{font-size:16px;font-weight:500;color:var(--teal);padding:14px 0;margin-right:auto;display:flex;align-items:center;gap:6px}
-.brand-icon{width:28px;height:28px;background:var(--teal);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
-.role-toggle{display:flex;gap:2px;padding:6px 0}
-.role-btn{padding:6px 14px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
-.role-btn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
-.main{display:flex;flex:1;min-height:560px}
-.sidebar{width:200px;border-right:0.5px solid var(--color-border-tertiary);padding:1rem 0;background:var(--color-background-secondary);flex-shrink:0}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);border-left:2px solid transparent;transition:all .12s}
-.nav-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
-.nav-item.active{color:var(--teal);border-left-color:var(--teal);background:var(--color-background-primary);font-weight:500}
-.nav-icon{font-size:16px;width:18px;text-align:center}
-.content{flex:1;padding:1.25rem;overflow-y:auto;background:var(--color-background-tertiary)}
-.section{display:none}.section.active{display:block}
-.page-title{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:.75rem}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
-.card-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1rem}
-.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem;text-align:center}
-.metric-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
-.metric-label{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
-.badge-green{background:#EAF3DE;color:#3B6D11}
-.badge-amber{background:var(--amber-light);color:#633806}
-.badge-red{background:#FCEBEB;color:#791F1F}
-.badge-blue{background:#E6F1FB;color:#0C447C}
-.badge-teal{background:var(--teal-light);color:var(--teal-dark)}
-.badge-purple{background:var(--purple-light);color:#3C3489}
-.btn{padding:7px 14px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);transition:all .12s}
-.btn:hover{background:var(--color-background-secondary)}
-.btn-primary{background:var(--teal);color:#fff;border-color:var(--teal)}
-.btn-primary:hover{background:var(--teal-dark)}
-.btn-sm{padding:4px 10px;font-size:12px}
-.btn-danger{background:transparent;color:#A32D2D;border-color:#F7C1C1}
-.btn-danger:hover{background:#FCEBEB}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:8px 10px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)}
-td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--color-background-secondary)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.75rem}
-.form-row.full{grid-template-columns:1fr}
-.form-group{display:flex;flex-direction:column;gap:4px}
-label{font-size:12px;color:var(--color-text-secondary)}
-input,select,textarea{padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
-textarea{resize:vertical;min-height:70px}
-.court-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-bottom:1rem}
-.court-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;cursor:pointer;transition:border .12s}
-.court-card:hover{border-color:var(--teal)}
-.court-card.selected{border:2px solid var(--teal)}
-.court-surface{width:100%;height:80px;border-radius:var(--border-radius-md);margin-bottom:.6rem;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:500;position:relative;overflow:hidden}
-.surface-clay{background:linear-gradient(135deg,#c1440e,#d85a30)}
-.surface-grass{background:linear-gradient(135deg,#3B6D11,#639922)}
-.surface-hard{background:linear-gradient(135deg,#185FA5,#378ADD)}
-.court-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
-.court-meta{font-size:11px;color:var(--color-text-secondary)}
-.slots-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:.75rem}
-.slot{padding:8px;border-radius:var(--border-radius-md);text-align:center;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);transition:all .12s}
-.slot.free{background:var(--teal-light);color:var(--teal-dark);border-color:var(--teal)}
-.slot.booked{background:var(--color-background-secondary);color:var(--color-text-tertiary);cursor:not-allowed}
-.slot.selected-slot{background:var(--teal);color:#fff;border-color:var(--teal)}
-.slot.free:hover{background:var(--teal);color:#fff}
-.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
-.av-teal{background:var(--teal-light);color:var(--teal-dark)}
-.av-purple{background:var(--purple-light);color:#3C3489}
-.av-amber{background:var(--amber-light);color:#633806}
-.av-coral{background:var(--coral-light);color:#993C1D}
-.player-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
-.player-row:last-child{border-bottom:none}
-.player-info{flex:1}
-.player-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
-.player-level{font-size:11px;color:var(--color-text-secondary)}
-.match-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:.75rem}
-.match-teams{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
-.team{flex:1;display:flex;gap:8px;align-items:center}
-.team-right{flex-direction:row-reverse;text-align:right}
-.vs{font-size:12px;font-weight:500;color:var(--color-text-secondary);flex-shrink:0}
-.match-score{font-size:18px;font-weight:500;color:var(--color-text-primary)}
-.match-meta{font-size:11px;color:var(--color-text-secondary);display:flex;gap:1rem}
-.open-match{border:2px solid #E6F1FB}
-.skill-bar{height:4px;border-radius:2px;background:var(--color-background-secondary);margin-top:4px;overflow:hidden}
-.skill-fill{height:100%;border-radius:2px;background:var(--teal)}
-.tab-bar{display:flex;gap:2px;margin-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary)}
-.tab{padding:8px 14px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;transition:all .12s}
-.tab.active{color:var(--teal);border-bottom-color:var(--teal);font-weight:500}
-.notif{padding:10px 12px;border-radius:var(--border-radius-md);background:var(--teal-light);border-left:3px solid var(--teal);margin-bottom:.6rem;font-size:13px;color:var(--teal-dark)}
-.empty{text-align:center;padding:2rem;color:var(--color-text-secondary);font-size:13px}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:100}
-.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);padding:1.25rem;width:380px;max-width:95%;border:0.5px solid var(--color-border-secondary)}
-.modal-title{font-size:15px;font-weight:500;margin-bottom:1rem;color:var(--color-text-primary)}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:1rem}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:8px 0}
-.cal-day{text-align:center;padding:6px 2px;font-size:12px;border-radius:var(--border-radius-md);cursor:pointer;color:var(--color-text-secondary)}
-.cal-day.has-booking{background:var(--teal-light);color:var(--teal-dark);font-weight:500}
-.cal-day.today{background:var(--teal);color:#fff}
-.cal-day.selected-day{border:2px solid var(--teal)}
-.cal-day:hover:not(.today){background:var(--color-background-secondary)}
-.cal-header{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:2px}
-.cal-header span{text-align:center;font-size:11px;color:var(--color-text-tertiary)}
-.location-pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--color-text-secondary)}
-.rating-stars{color:var(--amber);font-size:14px}
-.progress-ring{display:flex;align-items:center;gap:8px}
-.section-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:.75rem}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --lime: #C8F135;
+    --black: #0B0C0A;
+    --dark: #111310;
+    --mid: #1C1F1A;
+    --card: #181B16;
+    --muted: #6B7066;
+    --white: #F4F5F0;
+    --orange: #FF6B2B;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(11,12,10,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(200,241,53,0.08);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--lime);
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; align-items: center; gap: 36px; }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--lime);
+    color: var(--black) !important;
+    padding: 10px 22px;
+    border-radius: 4px;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .nav-cta:hover { background: #d9ff4a; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative;
+    padding: 120px 48px 80px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 70% 50%, rgba(200,241,53,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,107,43,0.05) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(var(--lime) 1px, transparent 1px), linear-gradient(90deg, var(--lime) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 640px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(200,241,53,0.1);
+    border: 1px solid rgba(200,241,53,0.25);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--lime);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--lime);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 9vw, 120px);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    color: var(--white);
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  h1 .accent { color: var(--lime); }
+  h1 .stroke {
+    -webkit-text-stroke: 2px var(--lime);
+    color: transparent;
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 28px 0 44px;
+    max-width: 480px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-actions {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--lime);
+    color: var(--black);
+    padding: 16px 32px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    transition: transform 0.15s, background 0.2s;
+  }
+  .btn-primary:hover { background: #d9ff4a; transform: translateY(-2px); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 10px;
+    border: 1px solid rgba(244,245,240,0.2);
+    color: var(--white);
+    padding: 16px 28px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .btn-ghost:hover { border-color: var(--lime); transform: translateY(-2px); }
+  .store-badges { display: flex; gap: 12px; flex-wrap: wrap; }
+  .store-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--mid);
+    border: 1px solid rgba(244,245,240,0.1);
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 500;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .store-badge:hover { border-color: var(--lime); transform: translateY(-2px); }
+  .store-badge svg { opacity: 0.8; }
+  .store-badge .store-text { display: flex; flex-direction: column; }
+  .store-badge .store-label { font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
+  .store-badge .store-name { font-size: 14px; font-weight: 700; }
+
+  /* HERO VISUAL */
+  .hero-visual {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 50%; display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .phone-mockup {
+    position: relative;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+  .phone-frame {
+    width: 260px; height: 520px;
+    background: var(--mid);
+    border-radius: 36px;
+    border: 2px solid rgba(200,241,53,0.2);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,241,53,0.05), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .phone-screen {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, #141714 0%, #0d110e 100%);
+    padding: 40px 20px 20px;
+  }
+  .phone-notch {
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 6px;
+    background: rgba(200,241,53,0.3);
+    border-radius: 3px;
+  }
+  .phone-ui { color: var(--white); }
+  .phone-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px;
+  }
+  .phone-header-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--lime); }
+  .phone-avatar { width: 30px; height: 30px; background: var(--lime); border-radius: 50%; display:flex;align-items:center;justify-content:center; }
+  .phone-avatar span { font-size: 13px; font-weight: 700; color: var(--black); }
+
+  .court-card {
+    background: rgba(200,241,53,0.06);
+    border: 1px solid rgba(200,241,53,0.15);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .court-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .court-meta { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
+  .court-slots { display: flex; gap: 6px; flex-wrap: wrap; }
+  .slot {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .slot-free { background: rgba(200,241,53,0.2); color: var(--lime); border: 1px solid rgba(200,241,53,0.3); }
+  .slot-taken { background: rgba(255,107,43,0.1); color: var(--orange); border: 1px solid rgba(255,107,43,0.2); }
+
+  .match-card {
+    background: rgba(255,107,43,0.06);
+    border: 1px solid rgba(255,107,43,0.15);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .match-label { font-size: 9px; color: var(--orange); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; }
+  .match-teams { display: flex; justify-content: space-between; align-items: center; }
+  .team { font-size: 12px; font-weight: 700; }
+  .vs { font-size: 10px; color: var(--muted); }
+  .match-time { margin-top: 8px; font-size: 10px; color: var(--muted); }
+
+  .phone-btn {
+    width: 100%;
+    background: var(--lime);
+    color: var(--black);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+
+  .phone-glow {
+    position: absolute;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(200,241,53,0.15) 0%, transparent 70%);
+    bottom: -50px; left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--mid);
+    border-top: 1px solid rgba(200,241,53,0.08);
+    border-bottom: 1px solid rgba(200,241,53,0.08);
+    padding: 36px 48px;
+    display: flex; justify-content: center; gap: 80px; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--lime);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
+
+  /* FEATURES */
+  .section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px;
+    color: var(--lime);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .section-intro { font-size: 18px; color: var(--muted); max-width: 560px; line-height: 1.6; font-weight: 300; margin-bottom: 64px; }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .feature-card {
+    background: var(--card);
+    padding: 40px 36px;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card:hover { background: #1e2219; }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--lime);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .feature-card:hover::before { transform: scaleX(1); }
+  .feature-icon {
+    width: 48px; height: 48px;
+    background: rgba(200,241,53,0.08);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 22px;
+  }
+  .feature-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  .how-section {
+    padding: 100px 48px;
+    background: var(--mid);
+  }
+  .how-inner { max-width: 1200px; margin: 0 auto; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-top: 64px; position: relative; }
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 24px; left: 48px; right: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,241,53,0.3), transparent);
+  }
+  .step { position: relative; }
+  .step-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: rgba(200,241,53,0.15);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .step-dot {
+    width: 12px; height: 12px;
+    background: var(--lime);
+    border-radius: 50%;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(200,241,53,0.5);
+  }
+  .step-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* MANAGERS CTA */
+  .managers-section {
+    padding: 100px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .managers-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .managers-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,107,43,0.04) 0%, transparent 60%);
+  }
+  .managers-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,107,43,0.12);
+    border: 1px solid rgba(255,107,43,0.25);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .btn-orange {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--orange);
+    color: var(--white);
+    padding: 16px 32px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    margin-top: 36px;
+    transition: transform 0.15s, background 0.2s;
+  }
+  .btn-orange:hover { background: #ff7d43; transform: translateY(-2px); }
+
+  .dashboard-mockup {
+    background: var(--card);
+    border: 1px solid rgba(255,107,43,0.2);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+  }
+  .dash-topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .dash-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--orange); }
+  .dash-date { font-size: 12px; color: var(--muted); }
+  .dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .dash-stat {
+    background: rgba(255,107,43,0.06);
+    border: 1px solid rgba(255,107,43,0.12);
+    padding: 16px;
+    border-radius: 8px;
+  }
+  .dash-stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--orange); }
+  .dash-stat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  .court-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+  }
+  .court-row:last-child { border-bottom: none; }
+  .court-name-small { font-weight: 600; }
+  .court-status { display: flex; gap: 4px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot-free { background: var(--lime); }
+  .dot-busy { background: var(--orange); }
+  .dot-maint { background: var(--muted); }
+  .court-revenue { font-size: 12px; color: var(--lime); font-weight: 600; }
+
+  /* TESTIMONIALS */
+  .testimonials-section { padding: 100px 48px; }
+  .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+  .testimonial {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 32px;
+    border-radius: 12px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .testimonial:hover { border-color: rgba(200,241,53,0.25); }
+  .testimonial-quote { font-size: 15px; line-height: 1.7; color: #c8cdc3; margin-bottom: 24px; font-weight: 300; }
+  .testimonial-author { display: flex; align-items: center; gap: 12px; }
+  .author-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+    color: var(--black);
+  }
+  .author-name { font-size: 14px; font-weight: 700; }
+  .author-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stars { color: var(--lime); font-size: 12px; margin-bottom: 16px; }
+
+  /* FOOTER CTA */
+  .footer-cta {
+    padding: 120px 48px;
+    text-align: center;
+    background: var(--mid);
+    position: relative;
+    overflow: hidden;
+  }
+  .footer-cta-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,241,53,0.06) 0%, transparent 70%);
+  }
+  .footer-cta-content { position: relative; z-index: 2; }
+  .footer-cta h2 { font-size: clamp(48px, 7vw, 100px); margin-bottom: 24px; }
+  .footer-cta p { font-size: 18px; color: var(--muted); max-width: 480px; margin: 0 auto 48px; line-height: 1.6; }
+  .footer-actions { display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+  footer {
+    padding: 40px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    flex-wrap: wrap; gap: 20px;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--lime); }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { text-decoration: none; color: var(--muted); font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-size: 12px; color: var(--muted); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-visual { display: none; }
+    .stats-bar { gap: 40px; padding: 36px 24px; }
+    .section { padding: 80px 24px; }
+    .features-grid { grid-template-columns: 1fr; gap: 2px; }
+    .how-section { padding: 80px 24px; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .steps::before { display: none; }
+    .managers-section { padding: 80px 24px; }
+    .managers-inner { grid-template-columns: 1fr; }
+    .testimonials-section { padding: 80px 24px; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .footer-cta { padding: 80px 24px; }
+    footer { padding: 32px 24px; }
+  }
 </style>
 </head>
 <body>
-<h2 class="sr-only">Padel matching and court management application</h2>
 
-<div class="app">
-  <div class="top-nav">
-    <div class="brand"><div class="brand-icon">P</div> PadelMatch</div>
-    <div class="role-toggle">
-      <button class="role-btn active" onclick="setRole('player')">Player</button>
-      <button class="role-btn" onclick="setRole('manager')">Court Manager</button>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Padel<span>Go</span></div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#managers" class="nav-cta">Court Managers →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Now live on iOS & Android</div>
+    <h1>Find.<br><span class="accent">Book.</span><br><span class="stroke">Dominate.</span></h1>
+    <p class="hero-sub">The ultimate padel companion. Book courts, organize matches, track your game — all in one place.</p>
+    <div class="store-badges">
+      <a href="#" class="store-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div class="store-text">
+          <span class="store-label">Download on the</span>
+          <span class="store-name">App Store</span>
+        </div>
+      </a>
+      <a href="#" class="store-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.65.19.99.07L15.35 12 11.2 7.85 3.18 23.76zM20.65 10.29l-2.6-1.49-3.36 3.35 3.36 3.35 2.61-1.5c.74-.43.74-1.28-.01-1.71zM2.01 1.33C1.96 1.5 1.94 1.69 1.94 1.9v20.2c0 .21.02.4.08.57L13.5 12 2.01 1.33zM15.35 12L4.17.24C3.83.12 3.47.14 3.18.3L11.2 8.35 15.35 12z"/></svg>
+        <div class="store-text">
+          <span class="store-label">Get it on</span>
+          <span class="store-name">Google Play</span>
+        </div>
+      </a>
     </div>
   </div>
-  <div class="main">
-    <div class="sidebar" id="sidebar"></div>
-    <div class="content" id="content"></div>
+
+  <!-- Phone mockup -->
+  <div class="hero-visual">
+    <div class="phone-mockup">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="phone-ui">
+            <div class="phone-header">
+              <div class="phone-header-title">PadelGo</div>
+              <div class="phone-avatar"><span>JD</span></div>
+            </div>
+
+            <div class="court-card">
+              <div class="court-name">Club Padel Pro — Court 1</div>
+              <div class="court-meta">📍 Nicosia · Indoor · Premium</div>
+              <div class="court-slots">
+                <span class="slot slot-free">08:00</span>
+                <span class="slot slot-taken">09:30</span>
+                <span class="slot slot-free">11:00</span>
+                <span class="slot slot-taken">12:30</span>
+                <span class="slot slot-free">14:00</span>
+                <span class="slot slot-free">15:30</span>
+              </div>
+            </div>
+
+            <div class="court-card">
+              <div class="court-name">Arena Padel — Court 3</div>
+              <div class="court-meta">📍 Limassol · Outdoor · Standard</div>
+              <div class="court-slots">
+                <span class="slot slot-taken">09:00</span>
+                <span class="slot slot-taken">10:30</span>
+                <span class="slot slot-free">12:00</span>
+                <span class="slot slot-free">13:30</span>
+              </div>
+            </div>
+
+            <div class="match-card">
+              <div class="match-label">⚡ Upcoming Match</div>
+              <div class="match-teams">
+                <span class="team">You & Alex</span>
+                <span class="vs">vs</span>
+                <span class="team">Maria & Sam</span>
+              </div>
+              <div class="match-time">Tomorrow · 15:30 · Court 2</div>
+            </div>
+
+            <button class="phone-btn">Book a Court Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="phone-glow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-number">12K+</div>
+    <div class="stat-label">Active Players</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">340+</div>
+    <div class="stat-label">Courts Available</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">98K</div>
+    <div class="stat-label">Matches Booked</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">4.9★</div>
+    <div class="stat-label">App Store Rating</div>
   </div>
 </div>
 
-<div id="modal-container"></div>
-
-<script>
-const state = {
-  role: 'player',
-  playerPage: 'dashboard',
-  managerPage: 'dashboard',
-  selectedCourt: null,
-  selectedSlot: null,
-  selectedDay: 15,
-  courts: [
-    {id:1, name:'Court Alpha', surface:'clay', indoor:false, price:18, status:'open', bookings:12, rating:4.8},
-    {id:2, name:'Court Beta', surface:'hard', indoor:true, price:22, status:'open', bookings:8, rating:4.5},
-    {id:3, name:'Court Gamma', surface:'grass', indoor:false, price:20, status:'maintenance', bookings:0, rating:4.7},
-    {id:4, name:'Court Delta', surface:'hard', indoor:true, price:25, status:'open', bookings:15, rating:4.9},
-  ],
-  bookings: [
-    {id:1, court:'Court Alpha', player:'Carlos Ruiz', date:'Apr 20',time:'09:00',duration:90,status:'confirmed',amount:27},
-    {id:2, court:'Court Beta', player:'Ana Torres',  date:'Apr 20',time:'11:00',duration:60,status:'confirmed',amount:22},
-    {id:3, court:'Court Delta', player:'Mia Chen',   date:'Apr 21',time:'14:00',duration:90,status:'pending',amount:37.5},
-    {id:4, court:'Court Alpha', player:'Luis Gomez', date:'Apr 22',time:'10:00',duration:60,status:'confirmed',amount:18},
-  ],
-  players: [
-    {name:'Carlos Ruiz',level:'Advanced',skill:85,wins:24,losses:8,avatar:'CR',avClass:'av-teal'},
-    {name:'Ana Torres',level:'Intermediate',skill:65,wins:15,losses:12,avatar:'AT',avClass:'av-purple'},
-    {name:'Mia Chen',level:'Advanced',skill:78,wins:20,losses:9,avatar:'MC',avClass:'av-amber'},
-    {name:'Luis Gomez',level:'Beginner',skill:40,wins:5,losses:18,avatar:'LG',avClass:'av-coral'},
-    {name:'Rafa Blanco',level:'Advanced',skill:90,wins:31,losses:5,avatar:'RB',avClass:'av-teal'},
-    {name:'Sofia Vidal',level:'Intermediate',skill:70,wins:18,losses:14,avatar:'SV',avClass:'av-purple'},
-  ],
-  openMatches: [
-    {id:1, players:['Carlos Ruiz','Ana Torres'], need:2, court:'Court Alpha', date:'Apr 22', time:'18:00', level:'Intermediate+'},
-    {id:2, players:['Rafa Blanco'], need:3, court:'Court Delta', date:'Apr 23', time:'09:00', level:'Advanced'},
-    {id:3, players:['Sofia Vidal','Mia Chen'], need:2, court:'Court Beta', date:'Apr 24', time:'17:00', level:'Intermediate'},
-  ],
-  myBookings: [
-    {court:'Court Alpha',date:'Apr 20',time:'09:00',partner:'Ana Torres',status:'confirmed'},
-    {court:'Court Delta',date:'Apr 25',time:'16:00',partner:'Open match',status:'pending'},
-  ],
-  slots: [
-    {time:'08:00',booked:true},{time:'09:00',booked:false},{time:'10:00',booked:true},
-    {time:'11:00',booked:false},{time:'12:00',booked:false},{time:'13:00',booked:true},
-    {time:'14:00',booked:false},{time:'15:00',booked:false},{time:'16:00',booked:true},
-    {time:'17:00',booked:false},{time:'18:00',booked:false},{time:'19:00',booked:true},
-  ]
-};
-
-const playerNav = [
-  {id:'dashboard', label:'Dashboard', icon:'◈'},
-  {id:'find-match', label:'Find a Match', icon:'⊕'},
-  {id:'book-court', label:'Book a Court', icon:'◎'},
-  {id:'my-bookings', label:'My Bookings', icon:'◷'},
-  {id:'leaderboard', label:'Leaderboard', icon:'◆'},
-  {id:'profile', label:'My Profile', icon:'◉'},
-];
-const managerNav = [
-  {id:'dashboard', label:'Dashboard', icon:'◈'},
-  {id:'courts', label:'My Courts', icon:'▣'},
-  {id:'bookings', label:'Bookings', icon:'◷'},
-  {id:'calendar', label:'Calendar', icon:'◫'},
-  {id:'players', label:'Players', icon:'◉'},
-  {id:'settings', label:'Settings', icon:'◎'},
-];
-
-function setRole(r){
-  state.role=r;
-  document.querySelectorAll('.role-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().includes(r.split(' ')[0])));
-  render();
-}
-
-function nav(page){
-  if(state.role==='player') state.playerPage=page;
-  else state.managerPage=page;
-  render();
-}
-
-function render(){
-  const nav = state.role==='player'?playerNav:managerNav;
-  const page = state.role==='player'?state.playerPage:state.managerPage;
-  document.getElementById('sidebar').innerHTML = nav.map(n=>`
-    <div class="nav-item${page===n.id?' active':''}" onclick="nav('${n.id}')">
-      <span class="nav-icon">${n.icon}</span>${n.label}
-    </div>`).join('');
-  const el = document.getElementById('content');
-  if(state.role==='player') el.innerHTML = renderPlayerPage(page);
-  else el.innerHTML = renderManagerPage(page);
-}
-
-function renderPlayerPage(page){
-  if(page==='dashboard') return `
-    <div class="page-title">Welcome back, Carlos 👋</div>
-    <div class="metrics">
-      <div class="metric"><div class="metric-val">24</div><div class="metric-label">Matches Won</div></div>
-      <div class="metric"><div class="metric-val">85</div><div class="metric-label">Skill Rating</div></div>
-      <div class="metric"><div class="metric-val">3</div><div class="metric-label">Upcoming Bookings</div></div>
-      <div class="metric"><div class="metric-val">#4</div><div class="metric-label">Leaderboard Rank</div></div>
-    </div>
-    <div class="notif">You have an open match invitation from Rafa Blanco on Apr 23 at 09:00 — <span style="font-weight:500;cursor:pointer" onclick="nav('find-match')">View</span></div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Upcoming matches</span></div>
-      ${state.myBookings.map(b=>`
-        <div class="player-row">
-          <div class="player-info">
-            <div class="player-name">${b.court} — ${b.time}</div>
-            <div class="player-level">${b.date} · Partner: ${b.partner}</div>
-          </div>
-          <span class="badge ${b.status==='confirmed'?'badge-green':'badge-amber'}">${b.status}</span>
-        </div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Recent results</span></div>
-      <div class="match-card">
-        <div class="match-teams">
-          <div class="team"><div class="avatar av-teal">CR</div><div><div style="font-size:12px;font-weight:500">Carlos + Ana</div></div></div>
-          <div class="vs">6–4<br>6–3</div>
-          <div class="team team-right"><div class="avatar av-purple">LG</div><div style="text-align:right"><div style="font-size:12px;font-weight:500">Luis + Rafa</div></div></div>
-        </div>
-        <div class="match-meta"><span>Court Alpha · Apr 18</span><span class="badge badge-green">Win</span></div>
+<!-- FEATURES -->
+<section id="features" style="padding:100px 0;">
+  <div class="section">
+    <div class="section-label">For Players</div>
+    <h2>Everything You<br>Need to <span style="color:var(--lime)">Play</span></h2>
+    <p class="section-intro">From finding a court to rallying your crew — PadelGo has every shot covered.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎾</div>
+        <div class="feature-title">Real-Time Court Booking</div>
+        <div class="feature-desc">See live availability at courts near you. Book in seconds with instant confirmation. No calls, no waiting.</div>
       </div>
-      <div class="match-card">
-        <div class="match-teams">
-          <div class="team"><div class="avatar av-teal">CR</div><div><div style="font-size:12px;font-weight:500">Carlos + Mia</div></div></div>
-          <div class="vs">5–7<br>4–6</div>
-          <div class="team team-right"><div class="avatar av-amber">SV</div><div style="text-align:right"><div style="font-size:12px;font-weight:500">Sofia + Rafa</div></div></div>
-        </div>
-        <div class="match-meta"><span>Court Delta · Apr 15</span><span class="badge badge-red">Loss</span></div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Match Matchmaking</div>
+        <div class="feature-desc">Find players at your skill level. Join open matches or create your own and let PadelGo fill the spots.</div>
       </div>
-    </div>`;
-
-  if(page==='find-match') return `
-    <div class="page-title">Find a Match</div>
-    <div class="tab-bar">
-      <div class="tab active">Open Matches</div>
-      <div class="tab" style="cursor:pointer" onclick="nav('book-court')">Create Match</div>
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <div class="feature-title">Team & Groups</div>
+        <div class="feature-desc">Create your regular crew, manage recurring bookings, and coordinate schedules without the group chat chaos.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Player Stats & Ranking</div>
+        <div class="feature-desc">Track your wins, match history, and rise through the PadelGo leaderboard. Every game counts.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔔</div>
+        <div class="feature-title">Smart Notifications</div>
+        <div class="feature-desc">Cancellation alerts, open slot notifications near you, and match reminders so you never miss a game.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💳</div>
+        <div class="feature-title">In-App Payments</div>
+        <div class="feature-desc">Pay securely within the app. Split costs with teammates. Digital receipts, refunds, and wallet included.</div>
+      </div>
     </div>
-    ${state.openMatches.map(m=>`
-      <div class="card open-match">
-        <div class="card-header">
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how-section">
+  <div class="how-inner">
+    <div class="section-label">How It Works</div>
+    <h2>On Court in<br><span style="color:var(--lime)">4 Steps</span></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">01</div>
+        <div class="step-dot"></div>
+        <div class="step-title">Download & Sign Up</div>
+        <div class="step-desc">Create your profile in under a minute. Set your skill level and location to get personalized results.</div>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <div class="step-dot"></div>
+        <div class="step-title">Find a Court</div>
+        <div class="step-desc">Browse courts near you with real-time availability. Filter by date, time, indoor/outdoor, and price.</div>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <div class="step-dot"></div>
+        <div class="step-title">Invite Your Team</div>
+        <div class="step-desc">Add your partners directly in the app. They get an instant notification to confirm the match.</div>
+      </div>
+      <div class="step">
+        <div class="step-number">04</div>
+        <div class="step-dot"></div>
+        <div class="step-title">Play & Track</div>
+        <div class="step-desc">Show up, play, and log results. Your stats update automatically after each match.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURT MANAGERS -->
+<section id="managers" class="managers-section">
+  <div class="managers-bg"></div>
+  <div class="managers-inner">
+    <div>
+      <div class="managers-badge">Court Managers</div>
+      <h2>Run Your Club<br><span style="color:var(--orange)">Smarter</span></h2>
+      <p style="font-size:17px;color:var(--muted);line-height:1.7;font-weight:300;margin-top:16px;">PadelGo's desktop dashboard gives club owners and court managers full control. Manage bookings, monitor occupancy, and grow your revenue — all from one powerful platform.</p>
+      <ul style="margin-top:28px;list-style:none;display:flex;flex-direction:column;gap:14px;">
+        <li style="display:flex;align-items:flex-start;gap:12px;font-size:15px;">
+          <span style="color:var(--orange);font-size:18px;margin-top:-1px;">→</span>
+          <span><strong>Live court calendar</strong> — See every booking in real time, drag to rearrange</span>
+        </li>
+        <li style="display:flex;align-items:flex-start;gap:12px;font-size:15px;">
+          <span style="color:var(--orange);font-size:18px;margin-top:-1px;">→</span>
+          <span><strong>Revenue analytics</strong> — Daily, weekly, and monthly income reports</span>
+        </li>
+        <li style="display:flex;align-items:flex-start;gap:12px;font-size:15px;">
+          <span style="color:var(--orange);font-size:18px;margin-top:-1px;">→</span>
+          <span><strong>Player database</strong> — Member profiles, booking history, and loyalty tiers</span>
+        </li>
+        <li style="display:flex;align-items:flex-start;gap:12px;font-size:15px;">
+          <span style="color:var(--orange);font-size:18px;margin-top:-1px;">→</span>
+          <span><strong>Automated billing</strong> — Invoicing and payment reconciliation done for you</span>
+        </li>
+      </ul>
+      <a href="#" class="btn-orange">Access Manager Portal →</a>
+    </div>
+
+    <div class="dashboard-mockup">
+      <div class="dash-topbar">
+        <div class="dash-title">Manager Dashboard</div>
+        <div class="dash-date">Mon, Apr 27 · Live</div>
+      </div>
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <div class="dash-stat-val">€840</div>
+          <div class="dash-stat-lbl">Today's Revenue</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-val">18</div>
+          <div class="dash-stat-lbl">Bookings Today</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-val">87%</div>
+          <div class="dash-stat-lbl">Occupancy Rate</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;font-weight:700;">Court Status</div>
+      <div class="court-row">
+        <div class="court-name-small">Court 1 — Indoor Pro</div>
+        <div class="court-status">
+          <span class="dot dot-busy"></span><span class="dot dot-busy"></span><span class="dot dot-free"></span><span class="dot dot-free"></span>
+        </div>
+        <div class="court-revenue">€280</div>
+      </div>
+      <div class="court-row">
+        <div class="court-name-small">Court 2 — Indoor Standard</div>
+        <div class="court-status">
+          <span class="dot dot-busy"></span><span class="dot dot-free"></span><span class="dot dot-free"></span><span class="dot dot-free"></span>
+        </div>
+        <div class="court-revenue">€210</div>
+      </div>
+      <div class="court-row">
+        <div class="court-name-small">Court 3 — Outdoor</div>
+        <div class="court-status">
+          <span class="dot dot-maint"></span><span class="dot dot-maint"></span><span class="dot dot-maint"></span><span class="dot dot-maint"></span>
+        </div>
+        <div class="court-revenue" style="color:var(--muted)">Maintenance</div>
+      </div>
+      <div class="court-row">
+        <div class="court-name-small">Court 4 — Outdoor</div>
+        <div class="court-status">
+          <span class="dot dot-busy"></span><span class="dot dot-busy"></span><span class="dot dot-busy"></span><span class="dot dot-free"></span>
+        </div>
+        <div class="court-revenue">€350</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="testimonials-section">
+  <div class="testimonials-inner">
+    <div class="section-label">Player Reviews</div>
+    <h2>The Court <span style="color:var(--lime)">Speaks</span></h2>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-quote">Booking a court used to be a nightmare of WhatsApp messages. Now I do it in 30 seconds. The matchmaking feature found me regular partners in my first week.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:var(--lime);">M</div>
           <div>
-            <div class="card-title">${m.court} · ${m.date} ${m.time}</div>
-            <div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px">Level: ${m.level}</div>
+            <div class="author-name">Marcos D.</div>
+            <div class="author-role">Amateur Player · Nicosia</div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="joinMatch(${m.id})">Join</button>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          ${m.players.map(p=>{const pl=state.players.find(x=>x.name===p);return`<div class="avatar ${pl?.avClass||'av-teal'}" title="${p}">${p.split(' ').map(w=>w[0]).join('')}</div>`;}).join('')}
-          ${Array(m.need).fill(0).map(()=>`<div class="avatar" style="border:0.5px dashed var(--color-border-secondary);color:var(--color-text-tertiary);font-size:16px">+</div>`).join('')}
-          <span style="font-size:12px;color:var(--color-text-secondary);margin-left:4px">${m.players.length}/4 players</span>
-        </div>
-      </div>`).join('')}`;
-
-  if(page==='book-court') return `
-    <div class="page-title">Book a Court</div>
-    <div class="section-sub">Select a court, pick a date and time</div>
-    <div class="court-grid">
-      ${state.courts.filter(c=>c.status==='open').map(c=>`
-        <div class="court-card${state.selectedCourt===c.id?' selected':''}" onclick="selectCourt(${c.id})">
-          <div class="court-surface surface-${c.surface}">
-            <span style="background:rgba(0,0,0,.25);padding:2px 7px;border-radius:20px">${c.surface}</span>
-          </div>
-          <div class="court-name">${c.name}</div>
-          <div class="court-meta">${c.indoor?'Indoor':'Outdoor'} · €${c.price}/hr</div>
-          <div style="display:flex;align-items:center;gap:4px;margin-top:4px">
-            <span class="rating-stars">★</span><span style="font-size:12px">${c.rating}</span>
-          </div>
-        </div>`).join('')}
-    </div>
-    ${state.selectedCourt?`
-    <div class="card">
-      <div class="card-header"><span class="card-title">Available slots — Apr ${state.selectedDay}</span>
-        <div style="display:flex;gap:4px">
-          <button class="btn btn-sm" onclick="state.selectedDay=Math.max(20,state.selectedDay-1);render()">‹</button>
-          <span style="font-size:13px;padding:4px 8px">Apr ${state.selectedDay}</span>
-          <button class="btn btn-sm" onclick="state.selectedDay=Math.min(30,state.selectedDay+1);render()">›</button>
         </div>
       </div>
-      <div class="slots-grid">
-        ${state.slots.map(s=>`
-          <div class="slot ${s.booked?'booked':(state.selectedSlot===s.time?'selected-slot':'free')}" 
-            onclick="${s.booked?'':'selectSlot(\''+s.time+'\')'}">${s.time}${s.booked?'<br><span style=font-size:10px>Booked</span>':''}</div>`).join('')}
-      </div>
-      ${state.selectedSlot?`
-        <div style="margin-top:1rem;padding-top:.75rem;border-top:0.5px solid var(--color-border-tertiary)">
-          <div style="font-size:13px;margin-bottom:.5rem">Duration</div>
-          <div style="display:flex;gap:6px">
-            <button class="btn btn-sm" onclick="bookConfirm(60)">60 min · €${state.courts.find(c=>c.id===state.selectedCourt)?.price}</button>
-            <button class="btn btn-primary btn-sm" onclick="bookConfirm(90)">90 min · €${((state.courts.find(c=>c.id===state.selectedCourt)?.price||0)*1.5).toFixed(0)}</button>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-quote">My group uses it every week. The team scheduling alone is worth it. We never double-book, and the reminders mean nobody's a no-show anymore.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:var(--orange);">S</div>
+          <div>
+            <div class="author-name">Sophie K.</div>
+            <div class="author-role">Club Member · Limassol</div>
           </div>
-        </div>`:``}
-    </div>`:``}`;
-
-  if(page==='my-bookings') return `
-    <div class="page-title">My Bookings</div>
-    <div class="card">
-      <table>
-        <tr><th>Court</th><th>Date</th><th>Time</th><th>Partner</th><th>Status</th><th></th></tr>
-        ${state.myBookings.map(b=>`
-          <tr>
-            <td>${b.court}</td><td>${b.date}</td><td>${b.time}</td><td>${b.partner}</td>
-            <td><span class="badge ${b.status==='confirmed'?'badge-green':'badge-amber'}">${b.status}</span></td>
-            <td><button class="btn btn-sm btn-danger">Cancel</button></td>
-          </tr>`).join('')}
-      </table>
-    </div>`;
-
-  if(page==='leaderboard') return `
-    <div class="page-title">Leaderboard</div>
-    <div class="card">
-      ${state.players.sort((a,b)=>b.skill-a.skill).map((p,i)=>`
-        <div class="player-row">
-          <span style="font-size:13px;font-weight:500;width:20px;color:${i<3?'var(--teal)':'var(--color-text-secondary)'}">${i+1}</span>
-          <div class="avatar ${p.avClass}">${p.avatar}</div>
-          <div class="player-info">
-            <div class="player-name">${p.name}</div>
-            <div class="skill-bar"><div class="skill-fill" style="width:${p.skill}%"></div></div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:13px;font-weight:500">${p.skill}</div>
-            <div style="font-size:11px;color:var(--color-text-secondary)">${p.wins}W / ${p.losses}L</div>
-          </div>
-          <span class="badge ${p.level==='Advanced'?'badge-teal':p.level==='Intermediate'?'badge-blue':'badge-amber'}">${p.level}</span>
-        </div>`).join('')}
-    </div>`;
-
-  if(page==='profile') return `
-    <div class="page-title">My Profile</div>
-    <div class="card">
-      <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1rem">
-        <div class="avatar av-teal" style="width:56px;height:56px;font-size:18px">CR</div>
-        <div>
-          <div style="font-size:16px;font-weight:500">Carlos Ruiz</div>
-          <div style="font-size:13px;color:var(--color-text-secondary)">carlos.ruiz@email.com</div>
-          <span class="badge badge-teal" style="margin-top:4px">Advanced</span>
         </div>
-        <button class="btn btn-sm" style="margin-left:auto">Edit</button>
       </div>
-      <div class="metrics">
-        <div class="metric"><div class="metric-val">85</div><div class="metric-label">Skill rating</div></div>
-        <div class="metric"><div class="metric-val">24</div><div class="metric-label">Wins</div></div>
-        <div class="metric"><div class="metric-val">8</div><div class="metric-label">Losses</div></div>
-        <div class="metric"><div class="metric-val">75%</div><div class="metric-label">Win rate</div></div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-quote">The stats tracking got me hooked. Watching my ranking climb after each match is weirdly addictive. Best sports app I've used, full stop.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:#7C6FCD;">A</div>
+          <div>
+            <div class="author-name">Alex P.</div>
+            <div class="author-role">Competitive Player · Paphos</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title" style="margin-bottom:.75rem">Preferences</div>
-      <div class="form-row"><div class="form-group"><label>Preferred surface</label><select><option>Clay</option><option>Hard</option><option>Grass</option></select></div>
-      <div class="form-group"><label>Preferred time</label><select><option>Morning (8–12)</option><option selected>Afternoon (12–17)</option><option>Evening (17–21)</option></select></div></div>
-      <div class="form-row"><div class="form-group"><label>Play style</label><select><option>Defensive</option><option selected>All-round</option><option>Aggressive</option></select></div>
-      <div class="form-group"><label>Availability</label><select><option>Weekdays</option><option>Weekends</option><option selected>Both</option></select></div></div>
-      <button class="btn btn-primary btn-sm" style="margin-top:.5rem">Save preferences</button>
-    </div>`;
+  </div>
+</section>
 
-  return `<div class="page-title">${page}</div><div class="empty">Coming soon</div>`;
-}
-
-function renderManagerPage(page){
-  if(page==='dashboard') return `
-    <div class="page-title">Manager Dashboard</div>
-    <div class="metrics">
-      <div class="metric"><div class="metric-val">4</div><div class="metric-label">Total Courts</div></div>
-      <div class="metric"><div class="metric-val">€${state.bookings.reduce((s,b)=>s+b.amount,0).toFixed(0)}</div><div class="metric-label">This Week Revenue</div></div>
-      <div class="metric"><div class="metric-val">${state.bookings.length}</div><div class="metric-label">Active Bookings</div></div>
-      <div class="metric"><div class="metric-val">91%</div><div class="metric-label">Occupancy Rate</div></div>
+<!-- FOOTER CTA -->
+<section class="footer-cta">
+  <div class="footer-cta-bg"></div>
+  <div class="footer-cta-content">
+    <h2>Ready to<br><span style="color:var(--lime)">Play?</span></h2>
+    <p>Join thousands of players already on PadelGo. Your next match is one tap away.</p>
+    <div class="footer-actions">
+      <a href="#" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        App Store
+      </a>
+      <a href="#" class="btn-primary" style="background:var(--white)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--black)"><path d="M3.18 23.76c.3.17.65.19.99.07L15.35 12 11.2 7.85 3.18 23.76zM20.65 10.29l-2.6-1.49-3.36 3.35 3.36 3.35 2.61-1.5c.74-.43.74-1.28-.01-1.71zM2.01 1.33C1.96 1.5 1.94 1.69 1.94 1.9v20.2c0 .21.02.4.08.57L13.5 12 2.01 1.33zM15.35 12L4.17.24C3.83.12 3.47.14 3.18.3L11.2 8.35 15.35 12z"/></svg>
+        Google Play
+      </a>
+      <a href="#managers" class="btn-ghost">I manage a club →</a>
     </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Court status</span><button class="btn btn-sm btn-primary" onclick="nav('courts')">Manage</button></div>
-      ${state.courts.map(c=>`
-        <div class="player-row">
-          <div class="player-info">
-            <div class="player-name">${c.name} <span class="badge badge-${c.surface==='clay'?'coral':c.surface==='grass'?'green':'blue'}">${c.surface}</span></div>
-            <div class="player-level">${c.indoor?'Indoor':'Outdoor'} · €${c.price}/hr · ${c.bookings} bookings this week</div>
-          </div>
-          <span class="badge ${c.status==='open'?'badge-green':'badge-amber'}">${c.status}</span>
-        </div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Today's bookings</span></div>
-      ${state.bookings.filter((_,i)=>i<3).map(b=>`
-        <div class="player-row">
-          <div class="player-info">
-            <div class="player-name">${b.player} — ${b.court}</div>
-            <div class="player-level">${b.date} · ${b.time} · ${b.duration}min</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:13px;font-weight:500">€${b.amount}</div>
-            <span class="badge ${b.status==='confirmed'?'badge-green':'badge-amber'}">${b.status}</span>
-          </div>
-        </div>`).join('')}
-    </div>`;
+  </div>
+</section>
 
-  if(page==='courts') return `
-    <div class="page-title">My Courts</div>
-    <div style="display:flex;justify-content:flex-end;margin-bottom:.75rem"><button class="btn btn-primary btn-sm" onclick="showAddCourt()">+ Add court</button></div>
-    <div class="court-grid">
-      ${state.courts.map(c=>`
-        <div class="court-card">
-          <div class="court-surface surface-${c.surface}">
-            <span style="background:rgba(0,0,0,.25);padding:2px 7px;border-radius:20px">${c.surface}</span>
-          </div>
-          <div class="court-name">${c.name}</div>
-          <div class="court-meta">${c.indoor?'Indoor':'Outdoor'} · €${c.price}/hr</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
-            <span class="badge ${c.status==='open'?'badge-green':'badge-amber'}">${c.status}</span>
-            <div style="display:flex;gap:4px">
-              <button class="btn btn-sm" onclick="toggleStatus(${c.id})">${c.status==='open'?'Close':'Open'}</button>
-            </div>
-          </div>
-        </div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-title" style="margin-bottom:.75rem">Location & facility info</div>
-      <div class="form-row">
-        <div class="form-group"><label>Venue name</label><input value="PadelArena Nicosia"></div>
-        <div class="form-group"><label>City</label><input value="Nicosia, Cyprus"></div>
-      </div>
-      <div class="form-row full"><div class="form-group"><label>Address</label><input value="24 Makarios Ave, Nicosia 1065"></div></div>
-      <div class="form-row">
-        <div class="form-group"><label>Phone</label><input value="+357 22 000 000"></div>
-        <div class="form-group"><label>Opening hours</label><input value="07:00 – 22:00"></div>
-      </div>
-      <button class="btn btn-primary btn-sm" style="margin-top:.5rem">Save info</button>
-    </div>`;
+<footer>
+  <div class="footer-logo">PadelGo</div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Support</a>
+    <a href="#managers">Court Managers</a>
+  </div>
+  <div class="footer-copy">© 2026 PadelGo. All rights reserved.</div>
+</footer>
 
-  if(page==='bookings') return `
-    <div class="page-title">Bookings</div>
-    <div class="card">
-      <div style="display:flex;gap:8px;margin-bottom:.75rem">
-        <select style="font-size:12px"><option>All courts</option>${state.courts.map(c=>`<option>${c.name}</option>`).join('')}</select>
-        <select style="font-size:12px"><option>All statuses</option><option>Confirmed</option><option>Pending</option></select>
-        <button class="btn btn-primary btn-sm" style="margin-left:auto">+ New booking</button>
-      </div>
-      <table>
-        <tr><th>Player</th><th>Court</th><th>Date</th><th>Time</th><th>Duration</th><th>Amount</th><th>Status</th><th></th></tr>
-        ${state.bookings.map(b=>`
-          <tr>
-            <td>${b.player}</td><td>${b.court}</td><td>${b.date}</td><td>${b.time}</td>
-            <td>${b.duration}min</td><td>€${b.amount}</td>
-            <td><span class="badge ${b.status==='confirmed'?'badge-green':'badge-amber'}">${b.status}</span></td>
-            <td><button class="btn btn-sm btn-danger" onclick="cancelBooking(${b.id})">Cancel</button></td>
-          </tr>`).join('')}
-      </table>
-    </div>`;
-
-  if(page==='calendar') return `
-    <div class="page-title">Calendar</div>
-    <div style="display:flex;gap:.75rem">
-      <div class="card" style="flex:0 0 220px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
-          <span style="font-size:13px;font-weight:500">April 2026</span>
-        </div>
-        <div class="cal-header">${['M','T','W','T','F','S','S'].map(d=>`<span>${d}</span>`).join('')}</div>
-        <div class="cal-grid">
-          ${[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30].map(d=>`
-            <div class="cal-day${d===20?' today':''} ${[20,21,22,25,26,28].includes(d)?' has-booking':''} ${state.selectedDay===d?' selected-day':''}" onclick="state.selectedDay=${d};render()">${d}</div>`).join('')}
-        </div>
-        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:.5rem">
-          <span style="display:inline-block;width:8px;height:8px;background:var(--teal-light);border-radius:2px;margin-right:4px"></span>Has bookings
-        </div>
-      </div>
-      <div style="flex:1">
-        <div class="card">
-          <div class="card-title" style="margin-bottom:.75rem">Apr ${state.selectedDay} — Schedule</div>
-          ${state.courts.map(c=>`
-            <div style="margin-bottom:.75rem">
-              <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">${c.name}</div>
-              <div style="display:flex;gap:4px;flex-wrap:wrap">
-                ${state.slots.slice(0,8).map(s=>`
-                  <div style="padding:4px 8px;border-radius:var(--border-radius-md);font-size:11px;background:${s.booked?'var(--teal-light)':'var(--color-background-secondary)'};color:${s.booked?'var(--teal-dark)':'var(--color-text-tertiary)'};border:0.5px solid ${s.booked?'var(--teal)':'var(--color-border-tertiary)'}">${s.time}${s.booked?' ✓':''}</div>`).join('')}
-              </div>
-            </div>`).join('')}
-        </div>
-      </div>
-    </div>`;
-
-  if(page==='players') return `
-    <div class="page-title">Players</div>
-    <div class="card">
-      <div style="display:flex;gap:8px;margin-bottom:.75rem">
-        <input placeholder="Search players..." style="flex:1">
-        <select style="font-size:12px"><option>All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
-      </div>
-      ${state.players.map(p=>`
-        <div class="player-row">
-          <div class="avatar ${p.avClass}">${p.avatar}</div>
-          <div class="player-info">
-            <div class="player-name">${p.name}</div>
-            <div class="player-level">${p.wins}W · ${p.losses}L · Rating ${p.skill}</div>
-            <div class="skill-bar"><div class="skill-fill" style="width:${p.skill}%"></div></div>
-          </div>
-          <span class="badge ${p.level==='Advanced'?'badge-teal':p.level==='Intermediate'?'badge-blue':'badge-amber'}">${p.level}</span>
-        </div>`).join('')}
-    </div>`;
-
-  if(page==='settings') return `
-    <div class="page-title">Settings</div>
-    <div class="card">
-      <div class="card-title" style="margin-bottom:.75rem">Booking rules</div>
-      <div class="form-row">
-        <div class="form-group"><label>Min booking notice (hours)</label><input type="number" value="2"></div>
-        <div class="form-group"><label>Max advance booking (days)</label><input type="number" value="14"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Cancellation policy (hours)</label><input type="number" value="24"></div>
-        <div class="form-group"><label>Default slot duration (min)</label><select><option>60</option><option selected>90</option><option>120</option></select></div>
-      </div>
-      <button class="btn btn-primary btn-sm" style="margin-top:.5rem">Save rules</button>
-    </div>
-    <div class="card">
-      <div class="card-title" style="margin-bottom:.75rem">Notifications</div>
-      ${['New booking request','Cancellation alert','Daily summary email','Weekly revenue report'].map(n=>`
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)">
-          <span style="font-size:13px">${n}</span>
-          <input type="checkbox" checked style="width:16px;height:16px;accent-color:var(--teal)">
-        </div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-title" style="margin-bottom:.75rem">Payment</div>
-      <div class="form-row">
-        <div class="form-group"><label>Currency</label><select><option>EUR (€)</option><option>USD ($)</option><option>GBP (£)</option></select></div>
-        <div class="form-group"><label>VAT (%)</label><input type="number" value="19"></div>
-      </div>
-      <button class="btn btn-primary btn-sm" style="margin-top:.5rem">Save payment settings</button>
-    </div>`;
-
-  return `<div class="page-title">${page}</div><div class="empty">Coming soon</div>`;
-}
-
-function selectCourt(id){ state.selectedCourt = state.selectedCourt===id?null:id; state.selectedSlot=null; render(); }
-function selectSlot(t){ state.selectedSlot = state.selectedSlot===t?null:t; render(); }
-function toggleStatus(id){ const c=state.courts.find(x=>x.id===id); if(c) c.status=c.status==='open'?'maintenance':'open'; render(); }
-function cancelBooking(id){ state.bookings=state.bookings.filter(b=>b.id!==id); render(); }
-
-function joinMatch(id){
-  const m=state.openMatches.find(x=>x.id===id);
-  if(m&&m.need>0){m.players.push('You');m.need--;}
-  render();
-  if(m&&m.need===0) alert('Match is now full! Court booked. Check My Bookings.');
-}
-
-function bookConfirm(dur){
-  const court=state.courts.find(c=>c.id===state.selectedCourt);
-  if(!court||!state.selectedSlot) return;
-  const amt=(court.price*(dur/60)).toFixed(0);
-  const slot=state.slots.find(s=>s.time===state.selectedSlot);
-  if(slot) slot.booked=true;
-  state.myBookings.push({court:court.name,date:'Apr '+state.selectedDay,time:state.selectedSlot,partner:'TBD',status:'confirmed'});
-  state.selectedSlot=null;
-  alert(`Booked! ${court.name} at ${state.selectedSlot||''} for ${dur}min — €${amt}`);
-  nav('my-bookings');
-}
-
-function showAddCourt(){
-  document.getElementById('modal-container').innerHTML=`
-    <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-      <div class="modal">
-        <div class="modal-title">Add new court</div>
-        <div class="form-row"><div class="form-group"><label>Court name</label><input id="nc-name" placeholder="e.g. Court Echo"></div>
-        <div class="form-group"><label>Surface</label><select id="nc-surface"><option>clay</option><option>hard</option><option>grass</option></select></div></div>
-        <div class="form-row"><div class="form-group"><label>Price (€/hr)</label><input id="nc-price" type="number" value="20"></div>
-        <div class="form-group"><label>Type</label><select id="nc-indoor"><option value="0">Outdoor</option><option value="1">Indoor</option></select></div></div>
-        <div class="modal-actions">
-          <button class="btn btn-sm" onclick="closeModal()">Cancel</button>
-          <button class="btn btn-primary btn-sm" onclick="addCourt()">Add court</button>
-        </div>
-      </div>
-    </div>`;
-}
-
-function addCourt(){
-  const name=document.getElementById('nc-name').value||'New Court';
-  const surface=document.getElementById('nc-surface').value;
-  const price=parseFloat(document.getElementById('nc-price').value)||20;
-  const indoor=document.getElementById('nc-indoor').value==='1';
-  state.courts.push({id:Date.now(),name,surface,indoor,price,status:'open',bookings:0,rating:5.0});
-  closeModal(); render();
-}
-
-function closeModal(){ document.getElementById('modal-container').innerHTML=''; }
-
-render();
-</script>
 </body>
 </html>
