@@ -510,6 +510,11 @@
     letter-spacing: 2px;
   }
   .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
+  .stat--unavailable .stat-number {
+    filter: blur(10px);
+    opacity: 0.85;
+    user-select: none;
+  }
 
   /* FEATURES */
   .section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
@@ -910,19 +915,19 @@
 
 <!-- STATS -->
 <div class="stats-bar">
-  <div class="stat">
+  <div class="stat stat--unavailable">
     <div class="stat-number">12K+</div>
     <div class="stat-label">Active Players</div>
   </div>
-  <div class="stat">
+  <div class="stat stat--unavailable">
     <div class="stat-number">340+</div>
     <div class="stat-label">Courts Available</div>
   </div>
-  <div class="stat">
+  <div class="stat stat--unavailable">
     <div class="stat-number">98K</div>
     <div class="stat-label">Matches Booked</div>
   </div>
-  <div class="stat">
+  <div class="stat stat--unavailable">
     <div class="stat-number">4.9★</div>
     <div class="stat-label">App Store Rating</div>
   </div>
