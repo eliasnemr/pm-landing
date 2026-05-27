@@ -195,6 +195,75 @@
     line-height: 1;
   }
 
+  .waitlist {
+    margin-top: 36px;
+    max-width: 480px;
+    animation: fadeUp 0.6s 0.35s ease both;
+  }
+  .waitlist-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .waitlist-desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .waitlist-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .waitlist-form input[type="email"] {
+    flex: 1 1 200px;
+    min-width: 0;
+    background: var(--mid);
+    border: 1px solid rgba(244,245,240,0.12);
+    color: var(--white);
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .waitlist-form input[type="email"]::placeholder { color: var(--muted); }
+  .waitlist-form input[type="email"]:focus { border-color: rgba(200,241,53,0.5); }
+  .waitlist-form button {
+    flex: 0 0 auto;
+    background: var(--lime);
+    color: var(--black);
+    border: none;
+    padding: 14px 22px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .waitlist-form button:hover:not(:disabled) { background: #d9ff4a; transform: translateY(-1px); }
+  .waitlist-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .waitlist-msg {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .waitlist-msg.is-success { color: var(--lime); }
+  .waitlist-msg.is-error { color: var(--orange); }
+  .waitlist--center {
+    margin: 0 auto 40px;
+    max-width: 440px;
+    text-align: center;
+  }
+  .waitlist--center .waitlist-form { justify-content: center; }
+
   /* HERO VISUAL */
   .hero-visual {
     position: absolute; right: 0; top: 0; bottom: 0;
@@ -583,6 +652,7 @@
     <a href="#features">Features</a>
     <a href="#how">How It Works</a>
     <a href="#testimonials">Reviews</a>
+    <a href="#waitlist">Waitlist</a>
     <a href="#managers" class="nav-cta">Court Managers →</a>
   </div>
 </nav>
@@ -592,7 +662,7 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-badge">Now live on iOS & Android</div>
+    <div class="hero-badge">Apps launching soon</div>
     <h1>Find.<br><span class="accent">Book.</span><br><span class="stroke">Dominate.</span></h1>
     <p class="hero-sub">The ultimate padel companion. Book courts, organize matches, track your game — all in one place.</p>
     <div class="store-badges">
@@ -612,6 +682,15 @@
           <span class="store-coming-soon">Coming Soon</span>
         </div>
       </a>
+    </div>
+    <div class="waitlist" id="waitlist">
+      <p class="waitlist-title">Join the waitlist</p>
+      <p class="waitlist-desc">Get an email when the iOS and Android apps are available.</p>
+      <form class="waitlist-form" data-waitlist-form data-source="hero">
+        <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required>
+        <button type="submit">Join waitlist</button>
+      </form>
+      <p class="waitlist-msg" data-waitlist-msg hidden></p>
     </div>
   </div>
 
@@ -894,7 +973,15 @@
   <div class="footer-cta-bg"></div>
   <div class="footer-cta-content">
     <h2>Ready to<br><span style="color:var(--lime)">Play?</span></h2>
-    <p>Join thousands of players already on padelmatch.xyz. Your next match is one tap away.</p>
+    <p>Be first on the court — join the waitlist and we'll email you when the apps launch.</p>
+    <div class="waitlist waitlist--center">
+      <p class="waitlist-title">Join the waitlist</p>
+      <form class="waitlist-form" data-waitlist-form data-source="footer">
+        <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required>
+        <button type="submit">Notify me</button>
+      </form>
+      <p class="waitlist-msg" data-waitlist-msg hidden></p>
+    </div>
     <div class="footer-actions">
       <a href="#" class="btn-primary store-btn">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
@@ -922,6 +1009,67 @@
   </div>
   <div class="footer-copy">© 2026 padelmatch.xyz. All rights reserved.</div>
 </footer>
+
+<script>
+  // Set this to your deployed Cloudflare Worker URL after setup (see worker/waitlist.js)
+  const WAITLIST_API_URL = 'https://padelmatch-waitlist.eliasnemr.workers.dev';
+
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setWaitlistMessage(form, text, type) {
+    const msg = form.querySelector('[data-waitlist-msg]');
+    if (!msg) return;
+    msg.hidden = !text;
+    msg.textContent = text;
+    msg.className = 'waitlist-msg' + (type ? ' is-' + type : '');
+  }
+
+  document.querySelectorAll('[data-waitlist-form]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = form.querySelector('input[type="email"]');
+      const btn = form.querySelector('button[type="submit"]');
+      const email = (input?.value || '').trim().toLowerCase();
+
+      if (!EMAIL_RE.test(email)) {
+        setWaitlistMessage(form, 'Please enter a valid email address.', 'error');
+        return;
+      }
+
+      if (!WAITLIST_API_URL) {
+        setWaitlistMessage(form, 'Waitlist is not configured yet. Set WAITLIST_API_URL in index.html.', 'error');
+        return;
+      }
+
+      const prevLabel = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Joining…';
+      setWaitlistMessage(form, '', '');
+
+      try {
+        const res = await fetch(WAITLIST_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            source: form.dataset.source || 'landing',
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || 'Something went wrong');
+        }
+        form.reset();
+        setWaitlistMessage(form, "You're on the list! We'll email you when the apps launch.", 'success');
+      } catch (err) {
+        setWaitlistMessage(form, err.message || 'Could not join waitlist. Try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prevLabel;
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
