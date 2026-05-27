@@ -234,6 +234,14 @@
   }
   .waitlist-form input[type="email"]::placeholder { color: var(--muted); }
   .waitlist-form input[type="email"]:focus { border-color: rgba(200,241,53,0.5); }
+  .waitlist-form input[type="email"].waitlist-glow {
+    animation: waitlistGlow 900ms ease-out;
+  }
+  @keyframes waitlistGlow {
+    0% { box-shadow: 0 0 0 rgba(200,241,53,0); }
+    30% { box-shadow: 0 0 0 3px rgba(200,241,53,0.12), 0 0 22px rgba(200,241,53,0.35); }
+    100% { box-shadow: 0 0 0 rgba(200,241,53,0); }
+  }
   .waitlist-form button {
     flex: 0 0 auto;
     background: var(--lime);
@@ -1272,6 +1280,16 @@
     return { x: rect.left + rect.width * 0.5, y: rect.top + rect.height * 0.264 };
   }
 
+  function triggerWaitlistInputGlow() {
+    document.querySelectorAll('[data-waitlist-form] input[type="email"]').forEach((input) => {
+      input.classList.remove('waitlist-glow');
+      // re-trigger animation reliably
+      void input.offsetWidth;
+      input.classList.add('waitlist-glow');
+      window.setTimeout(() => input.classList.remove('waitlist-glow'), 950);
+    });
+  }
+
   function launchFallingBalls() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -1301,6 +1319,7 @@
     window.setTimeout(() => {
       racket.classList.add('is-hit');
       spawnHitEffect(layer, hitX, hitY, exitX, exitY);
+      triggerWaitlistInputGlow();
       window.setTimeout(() => racket.classList.remove('is-hit'), 320);
     }, 1170);
 
