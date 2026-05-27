@@ -263,6 +263,103 @@
     text-align: center;
   }
   .waitlist--center .waitlist-form { justify-content: center; }
+  .falling-balls-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 90;
+  }
+  .falling-ball {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 54px;
+    height: 54px;
+    aspect-ratio: 1;
+    margin-left: -27px;
+    margin-top: -27px;
+    border-radius: 50%;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 28% 24%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.18) 18%, rgba(255,255,255,0) 40%),
+      radial-gradient(circle at 36% 36%, #edff9d 0%, #c8f135 45%, #7f9f1b 100%);
+    border: 1px solid rgba(244,245,240,0.28);
+    box-shadow:
+      0 14px 28px rgba(200,241,53,0.2),
+      inset -12px -14px 22px rgba(0,0,0,0.22),
+      inset 10px 10px 18px rgba(255,255,255,0.18);
+    transform: translate3d(-120px, -120px, 0) rotate(0deg) scale(0.95);
+    animation: tennisRacketRicochet 1700ms cubic-bezier(0.2, 0.75, 0.25, 1) 120ms forwards;
+    will-change: transform;
+  }
+  .falling-ball::before,
+  .falling-ball::after {
+    content: '';
+    position: absolute;
+    inset: 12%;
+    border: 2px solid rgba(255,255,255,0.85);
+    border-radius: 50%;
+    opacity: 0.9;
+  }
+  .falling-ball::before { transform: rotate(32deg) scale(0.88, 0.55); }
+  .falling-ball::after { transform: rotate(-32deg) scale(0.88, 0.55); }
+  @keyframes tennisRacketRicochet {
+    0% { transform: translate3d(-120px, -120px, 0) rotate(0deg) scale(0.95); opacity: 0; }
+    8% { opacity: 1; }
+    62% { transform: translate3d(var(--hit-x, 72vw), var(--hit-y, 32vh), 0) rotate(760deg) scale(1); opacity: 1; }
+    100% { transform: translate3d(var(--exit-x, -220px), var(--exit-y, 112vh), 0) rotate(1500deg) scale(0.95); opacity: 0; }
+  }
+  .hit-smoke {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 56px;
+    height: 56px;
+    margin-left: -28px;
+    margin-top: -28px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(244,245,240,0.45) 0%, rgba(200,241,53,0.18) 35%, transparent 72%);
+    filter: blur(10px);
+    animation: smokePuff 700ms ease-out forwards;
+  }
+  .hit-streak {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--len, 48px);
+    height: 3px;
+    margin-top: -1.5px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(244,245,240,0.85), rgba(200,241,53,0.55) 45%, transparent);
+    transform-origin: left center;
+    animation: streakBurst 480ms ease-out forwards;
+  }
+  .hit-ring {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    margin-left: -12px;
+    margin-top: -12px;
+    border-radius: 50%;
+    border: 2px solid rgba(200,241,53,0.55);
+    box-shadow: 0 0 20px rgba(200,241,53,0.25);
+    animation: hitRing 500ms ease-out forwards;
+  }
+  @keyframes smokePuff {
+    0% { transform: translate(var(--sx), var(--sy)) scale(0.25); opacity: 0.75; }
+    100% { transform: translate(calc(var(--sx) + var(--dx)), calc(var(--sy) + var(--dy))) scale(1.9); opacity: 0; }
+  }
+  @keyframes streakBurst {
+    0% { transform: translate(var(--sx), var(--sy)) rotate(var(--rot)) scaleX(0.15); opacity: 0.95; }
+    100% { transform: translate(calc(var(--sx) + var(--dx)), calc(var(--sy) + var(--dy))) rotate(var(--rot)) scaleX(1.15); opacity: 0; }
+  }
+  @keyframes hitRing {
+    0% { transform: translate(var(--sx), var(--sy)) scale(0.4); opacity: 0.9; }
+    100% { transform: translate(var(--sx), var(--sy)) scale(3.6); opacity: 0; }
+  }
 
   /* HERO VISUAL */
   .hero-visual {
@@ -275,17 +372,26 @@
     z-index: 0;
     width: min(420px, 55vw);
     height: auto;
-    left: 50%;
+    left: 40%;
     top: 50%;
-    transform: translate(-50%, -48%) rotate(-22deg);
+    transform: translate(-50%, -42%) rotate(-36deg);
     color: var(--lime);
     opacity: 0.14;
     animation: racketFloat 5s ease-in-out infinite;
   }
   .hero-racket svg { width: 100%; height: auto; display: block; }
+  .hero-racket.is-hit svg {
+    animation: racketHit 320ms ease-out;
+    transform-origin: 50% 35%;
+  }
+  @keyframes racketHit {
+    0% { transform: rotate(0deg) scale(1); }
+    35% { transform: rotate(12deg) scale(1.05); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
   @keyframes racketFloat {
-    0%, 100% { transform: translate(-50%, -48%) rotate(-22deg); }
-    50% { transform: translate(-50%, -52%) rotate(-18deg); }
+    0%, 100% { transform: translate(-50%, -42%) rotate(-36deg); }
+    50% { transform: translate(-50%, -46%) rotate(-32deg); }
   }
   .phone-mockup {
     position: relative;
@@ -723,6 +829,7 @@
           </linearGradient>
         </defs>
         <path d="M100 24 C48 24 22 72 22 118 C22 168 48 198 100 198 C152 198 178 168 178 118 C178 72 152 24 100 24 Z" stroke="currentColor" stroke-width="3" fill="url(#racketHead)"/>
+        <circle class="racket-hit-point" cx="100" cy="111" r="1" fill="transparent"/>
         <g fill="currentColor" opacity="0.45">
           <circle cx="72" cy="78" r="5"/><circle cx="100" cy="78" r="5"/><circle cx="128" cy="78" r="5"/>
           <circle cx="58" cy="102" r="5"/><circle cx="86" cy="102" r="5"/><circle cx="114" cy="102" r="5"/><circle cx="142" cy="102" r="5"/>
@@ -1113,6 +1220,94 @@
       }
     });
   });
+
+  function spawnHitEffect(layer, hitX, hitY, exitX, exitY) {
+    const exitAngle = Math.atan2(exitY - hitY, exitX - hitX) * (180 / Math.PI);
+
+    const ring = document.createElement('div');
+    ring.className = 'hit-ring';
+    ring.style.setProperty('--sx', `${hitX}px`);
+    ring.style.setProperty('--sy', `${hitY}px`);
+    layer.appendChild(ring);
+
+    for (let i = 0; i < 8; i += 1) {
+      const smoke = document.createElement('div');
+      smoke.className = 'hit-smoke';
+      const spread = (Math.random() - 0.5) * 70;
+      const angle = ((exitAngle + spread) * Math.PI) / 180;
+      const dist = 28 + Math.random() * 55;
+      smoke.style.setProperty('--sx', `${hitX}px`);
+      smoke.style.setProperty('--sy', `${hitY}px`);
+      smoke.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+      smoke.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+      smoke.style.animationDelay = `${Math.random() * 90}ms`;
+      layer.appendChild(smoke);
+    }
+
+    for (let i = 0; i < 6; i += 1) {
+      const streak = document.createElement('div');
+      streak.className = 'hit-streak';
+      const spread = (Math.random() - 0.5) * 36;
+      const angle = exitAngle + spread;
+      const rad = (angle * Math.PI) / 180;
+      const dist = 55 + Math.random() * 80;
+      streak.style.setProperty('--sx', `${hitX}px`);
+      streak.style.setProperty('--sy', `${hitY}px`);
+      streak.style.setProperty('--dx', `${Math.cos(rad) * dist}px`);
+      streak.style.setProperty('--dy', `${Math.sin(rad) * dist}px`);
+      streak.style.setProperty('--rot', `${angle}deg`);
+      streak.style.setProperty('--len', `${38 + Math.random() * 52}px`);
+      streak.style.animationDelay = `${Math.random() * 60}ms`;
+      layer.appendChild(streak);
+    }
+  }
+
+  function getRacketHeadCenter(racket) {
+    const point = racket.querySelector('.racket-hit-point');
+    if (point) {
+      const rect = point.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+    const rect = racket.getBoundingClientRect();
+    return { x: rect.left + rect.width * 0.5, y: rect.top + rect.height * 0.264 };
+  }
+
+  function launchFallingBalls() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const racket = document.querySelector('.hero-racket');
+    if (!racket) return;
+
+    const racketRect = racket.getBoundingClientRect();
+    if (racketRect.width < 1) return;
+
+    const { x: hitX, y: hitY } = getRacketHeadCenter(racket);
+    const exitX = -260;
+    const exitY = window.innerHeight + 120;
+
+    const layer = document.createElement('div');
+    layer.className = 'falling-balls-layer';
+    document.body.appendChild(layer);
+
+    const ball = document.createElement('div');
+    ball.className = 'falling-ball';
+    ball.style.setProperty('--hit-x', `${hitX}px`);
+    ball.style.setProperty('--hit-y', `${hitY}px`);
+    ball.style.setProperty('--exit-x', `${exitX}px`);
+    ball.style.setProperty('--exit-y', `${exitY}px`);
+
+    layer.appendChild(ball);
+
+    window.setTimeout(() => {
+      racket.classList.add('is-hit');
+      spawnHitEffect(layer, hitX, hitY, exitX, exitY);
+      window.setTimeout(() => racket.classList.remove('is-hit'), 320);
+    }, 1170);
+
+    window.setTimeout(() => layer.remove(), 2200);
+  }
+
+  window.addEventListener('load', launchFallingBalls, { once: true });
 </script>
 
 </body>
