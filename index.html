@@ -1266,7 +1266,7 @@
   function launchFallingBalls() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     function go() {
-      window.heroPixi?.playBallIntro?.();
+      window.heroPixi?.scheduleBallIntro?.();
     }
     if (window.heroPixi?.ready) go();
     else window.addEventListener('hero-pixi-ready', go, { once: true });

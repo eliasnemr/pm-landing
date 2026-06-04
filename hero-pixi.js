@@ -174,6 +174,32 @@
     let mouse = { x: w * 0.72, y: h * 0.45, active: false };
     let time = 0;
 
+    function isHeroLayoutReady() {
+      const visual = document.querySelector('.hero-visual');
+      if (!visual || window.innerWidth < 900) return false;
+      const rect = visual.getBoundingClientRect();
+      return rect.width > 80 && rect.height > 80;
+    }
+
+    function applyRacketTransform() {
+      if (!racketContainer.visible) return;
+      const floatY = Math.sin(racketAnim.floatPhase) * 14;
+      const floatRot = Math.sin(racketAnim.floatPhase * 0.85) * 0.035;
+      let hitRot = 0;
+      let hitScale = 1;
+      const hitElapsed = performance.now() - racketAnim.hitStart;
+      if (hitElapsed < racketAnim.hitDuration) {
+        const ht = hitElapsed / racketAnim.hitDuration;
+        const kick = Math.sin(ht * Math.PI);
+        hitRot = kick * 0.22;
+        hitScale = 1 + kick * 0.06;
+      }
+      racketContainer.x = racketAnim.baseX + Math.sin(racketAnim.floatPhase * 0.6) * 6;
+      racketContainer.y = racketAnim.baseY + floatY;
+      racketContainer.rotation = RACKET_ROT + floatRot + hitRot;
+      racketContainer.scale.set(racketAnim.baseScale * hitScale);
+    }
+
     function layoutRacket() {
       const visual = document.querySelector('.hero-visual');
       const isDesktop = window.innerWidth >= 900;
@@ -194,13 +220,20 @@
       racketAnim.baseX = visualRect.left - mount.getBoundingClientRect().left + visualRect.width * 0.2 - displayW * 0.5;
       racketAnim.baseY = visualRect.top - mount.getBoundingClientRect().top + visualRect.height * 0.58 - displayH * 0.34;
       racketAnim.baseScale = scale;
+      applyRacketTransform();
       document.body.classList.add('hero-racket--pixi');
       return true;
     }
 
     function getHitPointCanvas() {
       if (!racketContainer.visible) return null;
+      applyRacketTransform();
       return racketContainer.toGlobal(new PIXI.Point(HIT_LOCAL.x, HIT_LOCAL.y));
+    }
+
+    function isHitPointValid(hit) {
+      if (!hit) return false;
+      return hit.x > 40 && hit.y > 40 && hit.x < w - 20 && hit.y < h - 20;
     }
 
     function getHitPointScreen() {
@@ -310,11 +343,12 @@
       }
     }
 
-    function playBallIntro() {
-      if (!layoutRacket()) return;
-      const hit = getHitPointCanvas();
-      if (!hit) return;
+    let introAttempts = 0;
+    let introRetryId = 0;
+    let introPlayed = false;
 
+    function startBallIntro(hit) {
+      introPlayed = true;
       ballAnim.hit = { x: hit.x, y: hit.y };
       ballAnim.exit = { x: -120, y: h + 100 };
       ballAnim.start = { x: -90, y: -90 };
@@ -324,6 +358,41 @@
       ballContainer.visible = true;
       ballContainer.alpha = 0;
       ballContainer.scale.set(0.95);
+      ballContainer.x = ballAnim.start.x;
+      ballContainer.y = ballAnim.start.y;
+    }
+
+    function scheduleBallIntro() {
+      if (ballAnim.active || introPlayed) return;
+      introAttempts = 0;
+      if (introRetryId) cancelAnimationFrame(introRetryId);
+      introRetryId = requestAnimationFrame(attemptBallIntro);
+    }
+
+    function attemptBallIntro() {
+      introRetryId = 0;
+      introAttempts += 1;
+
+      if (!isHeroLayoutReady() || !layoutRacket()) {
+        if (introAttempts < 30) {
+          introRetryId = requestAnimationFrame(attemptBallIntro);
+        }
+        return;
+      }
+
+      const hit = getHitPointCanvas();
+      if (!isHitPointValid(hit)) {
+        if (introAttempts < 30) {
+          introRetryId = requestAnimationFrame(attemptBallIntro);
+        }
+        return;
+      }
+
+      startBallIntro(hit);
+    }
+
+    function playBallIntro() {
+      scheduleBallIntro();
     }
 
     window.heroPixi = {
@@ -331,6 +400,7 @@
       getHitPoint: getHitPointScreen,
       smack: smackRacket,
       playBallIntro,
+      scheduleBallIntro,
     };
     window.dispatchEvent(new Event('hero-pixi-ready'));
 
@@ -431,13 +501,25 @@
     app.ticker.add((ticker) => {
       time += ticker.deltaTime * 0.02;
       const dt = ticker.deltaTime;
+      const deltaMs = ticker.deltaMS > 0 ? ticker.deltaMS : (dt / 60) * 1000;
+
+      racketAnim.floatPhase += dt * 0.035;
+      if (racketContainer.visible) applyRacketTransform();
 
       if (ballAnim.active) {
-        ballAnim.elapsed += (dt / 60) * 1000;
+        ballAnim.elapsed += deltaMs;
         const preDelay = ballAnim.elapsed < ballAnim.delay;
         const t = preDelay
           ? 0
           : Math.min(1, (ballAnim.elapsed - ballAnim.delay) / ballAnim.duration);
+
+        if (!preDelay && t < ballAnim.hitAt) {
+          const liveHit = getHitPointCanvas();
+          if (liveHit) {
+            ballAnim.hit.x = liveHit.x;
+            ballAnim.hit.y = liveHit.y;
+          }
+        }
 
         if (preDelay) {
           ballContainer.x = ballAnim.start.x;
@@ -472,30 +554,10 @@
         }
       }
 
-      racketAnim.floatPhase += dt * 0.035;
-
       const px = mouse.active ? (mouse.x - w * 0.72) * 0.018 : 0;
       const py = mouse.active ? (mouse.y - h * 0.45) * 0.018 : 0;
       parallax.x += (px - parallax.x) * 0.06;
       parallax.y += (py - parallax.y) * 0.06;
-
-      if (racketContainer.visible) {
-        const floatY = Math.sin(racketAnim.floatPhase) * 14;
-        const floatRot = Math.sin(racketAnim.floatPhase * 0.85) * 0.035;
-        let hitRot = 0;
-        let hitScale = 1;
-        const hitElapsed = performance.now() - racketAnim.hitStart;
-        if (hitElapsed < racketAnim.hitDuration) {
-          const ht = hitElapsed / racketAnim.hitDuration;
-          const kick = Math.sin(ht * Math.PI);
-          hitRot = kick * 0.22;
-          hitScale = 1 + kick * 0.06;
-        }
-        racketContainer.x = racketAnim.baseX + Math.sin(racketAnim.floatPhase * 0.6) * 6;
-        racketContainer.y = racketAnim.baseY + floatY;
-        racketContainer.rotation = RACKET_ROT + floatRot + hitRot;
-        racketContainer.scale.set(racketAnim.baseScale * hitScale);
-      }
 
       glowOrbs.forEach((o) => {
         o.g.x = o.bx + Math.sin(time * o.drift + o.phase) * 28;
