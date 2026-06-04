@@ -91,10 +91,19 @@
       radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,107,43,0.05) 0%, transparent 60%);
   }
   .hero-grid {
-    position: absolute; inset: 0; opacity: 0.04;
+    position: absolute; inset: 0; opacity: 0.03;
     background-image: linear-gradient(var(--lime) 1px, transparent 1px), linear-gradient(90deg, var(--lime) 1px, transparent 1px);
     background-size: 60px 60px;
+    pointer-events: none;
   }
+  .hero-pixi {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-pixi canvas { display: block; width: 100%; height: 100%; }
   .hero-content { position: relative; z-index: 2; max-width: 640px; }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
@@ -383,32 +392,28 @@
     position: absolute; right: 0; top: 0; bottom: 0;
     width: 50%; display: flex; align-items: center; justify-content: center;
     pointer-events: none;
+    z-index: 2;
   }
   .hero-racket {
     position: absolute;
     z-index: 0;
     width: min(420px, 55vw);
     height: auto;
-    left: 40%;
-    top: 50%;
-    transform: translate(-50%, -42%) rotate(-36deg);
+    left: 20%;
+    top: 58%;
+    transform: translate(-50%, -34%) rotate(-36deg);
     color: var(--lime);
     opacity: 0.14;
     animation: racketFloat 5s ease-in-out infinite;
   }
+  body.hero-racket--pixi .hero-racket {
+    visibility: hidden;
+    pointer-events: none;
+  }
   .hero-racket svg { width: 100%; height: auto; display: block; }
-  .hero-racket.is-hit svg {
-    animation: racketHit 320ms ease-out;
-    transform-origin: 50% 35%;
-  }
-  @keyframes racketHit {
-    0% { transform: rotate(0deg) scale(1); }
-    35% { transform: rotate(12deg) scale(1.05); }
-    100% { transform: rotate(0deg) scale(1); }
-  }
   @keyframes racketFloat {
-    0%, 100% { transform: translate(-50%, -42%) rotate(-36deg); }
-    50% { transform: translate(-50%, -46%) rotate(-32deg); }
+    0%, 100% { transform: translate(-50%, -34%) rotate(-36deg); }
+    50% { transform: translate(-50%, -38%) rotate(-32deg); }
   }
   .phone-mockup {
     position: relative;
@@ -807,6 +812,7 @@
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
+  <div id="hero-pixi" class="hero-pixi" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="hero-badge">Platform & Apps launching soon</div>
     <h1>Find.<br><span class="accent">Book.</span><br><span class="stroke">Dominate.</span></h1>
@@ -1243,57 +1249,6 @@
     });
   });
 
-  function spawnHitEffect(layer, hitX, hitY, exitX, exitY) {
-    const exitAngle = Math.atan2(exitY - hitY, exitX - hitX) * (180 / Math.PI);
-
-    const ring = document.createElement('div');
-    ring.className = 'hit-ring';
-    ring.style.setProperty('--sx', `${hitX}px`);
-    ring.style.setProperty('--sy', `${hitY}px`);
-    layer.appendChild(ring);
-
-    for (let i = 0; i < 8; i += 1) {
-      const smoke = document.createElement('div');
-      smoke.className = 'hit-smoke';
-      const spread = (Math.random() - 0.5) * 70;
-      const angle = ((exitAngle + spread) * Math.PI) / 180;
-      const dist = 28 + Math.random() * 55;
-      smoke.style.setProperty('--sx', `${hitX}px`);
-      smoke.style.setProperty('--sy', `${hitY}px`);
-      smoke.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
-      smoke.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
-      smoke.style.animationDelay = `${Math.random() * 90}ms`;
-      layer.appendChild(smoke);
-    }
-
-    for (let i = 0; i < 6; i += 1) {
-      const streak = document.createElement('div');
-      streak.className = 'hit-streak';
-      const spread = (Math.random() - 0.5) * 36;
-      const angle = exitAngle + spread;
-      const rad = (angle * Math.PI) / 180;
-      const dist = 55 + Math.random() * 80;
-      streak.style.setProperty('--sx', `${hitX}px`);
-      streak.style.setProperty('--sy', `${hitY}px`);
-      streak.style.setProperty('--dx', `${Math.cos(rad) * dist}px`);
-      streak.style.setProperty('--dy', `${Math.sin(rad) * dist}px`);
-      streak.style.setProperty('--rot', `${angle}deg`);
-      streak.style.setProperty('--len', `${38 + Math.random() * 52}px`);
-      streak.style.animationDelay = `${Math.random() * 60}ms`;
-      layer.appendChild(streak);
-    }
-  }
-
-  function getRacketHeadCenter(racket) {
-    const point = racket.querySelector('.racket-hit-point');
-    if (point) {
-      const rect = point.getBoundingClientRect();
-      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-    }
-    const rect = racket.getBoundingClientRect();
-    return { x: rect.left + rect.width * 0.5, y: rect.top + rect.height * 0.264 };
-  }
-
   function triggerWaitlistInputGlow() {
     document.querySelectorAll('[data-waitlist-form] input[type="email"]').forEach((input) => {
       input.classList.remove('waitlist-glow');
@@ -1304,44 +1259,23 @@
     });
   }
 
+  window.addEventListener('hero-ball-hit', () => {
+    triggerWaitlistInputGlow();
+  }, { once: true });
+
   function launchFallingBalls() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const racket = document.querySelector('.hero-racket');
-    if (!racket) return;
-
-    const racketRect = racket.getBoundingClientRect();
-    if (racketRect.width < 1) return;
-
-    const { x: hitX, y: hitY } = getRacketHeadCenter(racket);
-    const exitX = -260;
-    const exitY = window.innerHeight + 120;
-
-    const layer = document.createElement('div');
-    layer.className = 'falling-balls-layer';
-    document.body.appendChild(layer);
-
-    const ball = document.createElement('div');
-    ball.className = 'falling-ball';
-    ball.style.setProperty('--hit-x', `${hitX}px`);
-    ball.style.setProperty('--hit-y', `${hitY}px`);
-    ball.style.setProperty('--exit-x', `${exitX}px`);
-    ball.style.setProperty('--exit-y', `${exitY}px`);
-
-    layer.appendChild(ball);
-
-    window.setTimeout(() => {
-      racket.classList.add('is-hit');
-      spawnHitEffect(layer, hitX, hitY, exitX, exitY);
-      triggerWaitlistInputGlow();
-      window.setTimeout(() => racket.classList.remove('is-hit'), 320);
-    }, 1170);
-
-    window.setTimeout(() => layer.remove(), 2200);
+    function go() {
+      window.heroPixi?.playBallIntro?.();
+    }
+    if (window.heroPixi?.ready) go();
+    else window.addEventListener('hero-pixi-ready', go, { once: true });
   }
 
   window.addEventListener('load', launchFallingBalls, { once: true });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/pixi.js@8.9.1/dist/pixi.min.js"></script>
+<script src="hero-pixi.js"></script>
 
 </body>
 </html>
