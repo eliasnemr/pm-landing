@@ -12,1270 +12,495 @@
 
   gtag('config', 'G-R4GX7D152H');
 </script>
-<title>padelmatch.xyz — Play. Book. Dominate.</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<title>PADELMATCH.XYZ — Find your next padel match</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root{
+    --court:#1E5FA8;        /* tournament turf blue */
+    --court-deep:#0A2440;   /* night-session navy */
+    --ball:#E4FF3C;         /* fluorescent padel ball */
+    --line:#F4F8FC;         /* white court lines */
+    --glass:rgba(244,248,252,.14);
+    --ink:#0A2440;
+    --paper:#F4F8FC;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Archivo',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    text-transform:uppercase;
+    letter-spacing:.01em;
+    line-height:1.02;
+  }
+  .mono{font-family:'JetBrains Mono',monospace}
+  a{color:inherit}
+  img{max-width:100%}
+  :focus-visible{outline:3px solid var(--ball);outline-offset:3px}
 
-  :root {
-    --lime: #C8F135;
-    --black: #0B0C0A;
-    --dark: #111310;
-    --mid: #1C1F1A;
-    --card: #181B16;
-    --muted: #6B7066;
-    --white: #F4F5F0;
-    --orange: #FF6B2B;
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;inset:0 0 auto 0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px clamp(20px,5vw,56px);
+    background:rgba(10,36,64,.72);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(244,248,252,.12);
+    color:var(--line);
   }
+  .logo{font-family:'Anton',sans-serif;font-size:1.3rem;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;display:flex;align-items:center;gap:10px}
+  .logo .dot{width:12px;height:12px;border-radius:50%;background:var(--ball);box-shadow:0 0 10px var(--ball)}
+  .nav-links{display:flex;gap:28px;align-items:center;list-style:none;font-size:.92rem;font-weight:500}
+  .nav-links a{text-decoration:none;opacity:.85;transition:opacity .15s}
+  .nav-links a:hover{opacity:1}
+  .btn{
+    display:inline-block;background:var(--ball);color:var(--court-deep);
+    font-weight:700;text-decoration:none;border:none;cursor:pointer;
+    padding:13px 26px;border-radius:999px;font-size:.95rem;font-family:'Archivo',sans-serif;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(228,255,60,.35)}
+  .btn.ghost{background:transparent;color:var(--line);border:1.5px solid rgba(244,248,252,.4)}
+  .btn.ghost:hover{border-color:var(--ball);color:var(--ball);box-shadow:none}
 
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--black);
-    color: var(--white);
-    overflow-x: hidden;
+  /* ---------- HERO : the glass court ---------- */
+  header{
+    position:relative;min-height:100svh;
+    background:linear-gradient(160deg,var(--court-deep) 0%,#10365E 55%,var(--court) 100%);
+    color:var(--line);
+    display:grid;align-items:center;
+    overflow:hidden;
+    padding:120px clamp(20px,5vw,56px) 80px;
   }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 48px;
-    background: rgba(11,12,10,0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(200,241,53,0.08);
-  }
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 3px;
-    color: var(--lime);
-  }
-  .nav-logo span { color: var(--white); }
-  .nav-links { display: flex; align-items: center; gap: 36px; }
-  .nav-links a {
-    text-decoration: none;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--white); }
-  .nav-cta {
-    background: var(--lime);
-    color: var(--black) !important;
-    padding: 10px 22px;
-    border-radius: 4px;
-    font-weight: 700 !important;
-    font-size: 13px !important;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: background 0.2s, transform 0.15s !important;
-  }
-  .nav-cta:hover { background: #d9ff4a; transform: translateY(-1px); }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex; align-items: center;
-    position: relative;
-    padding: 120px 48px 80px;
-    overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
+  /* court markings drawn as structure, not decoration */
+  header::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
     background:
-      radial-gradient(ellipse 60% 70% at 70% 50%, rgba(200,241,53,0.07) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,107,43,0.05) 0%, transparent 60%);
+      linear-gradient(var(--glass),var(--glass)) left 50% top 0 / 2px 100% no-repeat,     /* net line */
+      linear-gradient(var(--glass),var(--glass)) left 0 top 62% / 100% 2px no-repeat;     /* service line */
+    opacity:.9;
   }
-  .hero-grid {
-    position: absolute; inset: 0; opacity: 0.03;
-    background-image: linear-gradient(var(--lime) 1px, transparent 1px), linear-gradient(90deg, var(--lime) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
+  .hero-grid{
+    position:relative;z-index:2;
+    display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,72px);
+    max-width:1200px;margin:0 auto;width:100%;align-items:center;
   }
-  .hero-pixi {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ball);margin-bottom:22px;
   }
-  .hero-pixi canvas { display: block; width: 100%; height: 100%; }
-  .hero-content { position: relative; z-index: 2; max-width: 640px; }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(200,241,53,0.1);
-    border: 1px solid rgba(200,241,53,0.25);
-    padding: 6px 14px;
-    border-radius: 100px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--lime);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 32px;
-    animation: fadeUp 0.6s ease both;
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--ball)}
+  h1{font-size:clamp(3rem,7.5vw,5.8rem);margin-bottom:24px}
+  h1 .hollow{
+    color:transparent;
+    -webkit-text-stroke:2px var(--ball);
   }
-  /* .hero-badge::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--lime);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  } */
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+  .hero-sub{font-size:clamp(1.02rem,1.4vw,1.2rem);max-width:32rem;opacity:.88;margin-bottom:36px}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .store-note{font-size:.82rem;opacity:.65;margin-top:14px;font-family:'JetBrains Mono',monospace}
 
-  h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(64px, 9vw, 120px);
-    line-height: 0.92;
-    letter-spacing: 2px;
-    color: var(--white);
-    animation: fadeUp 0.6s 0.1s ease both;
-  }
-  h1 .accent { color: var(--lime); }
-  h1 .stroke {
-    -webkit-text-stroke: 2px var(--lime);
-    color: transparent;
-  }
-  .hero-sub {
-    font-size: 18px;
-    color: var(--muted);
-    font-weight: 300;
-    line-height: 1.6;
-    margin: 28px 0 44px;
-    max-width: 480px;
-    animation: fadeUp 0.6s 0.2s ease both;
-  }
-  .hero-actions {
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-    animation: fadeUp 0.6s 0.3s ease both;
-  }
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--lime);
-    color: var(--black);
-    padding: 16px 32px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.5px;
-    transition: transform 0.15s, background 0.2s;
-  }
-  .btn-primary:hover { background: #d9ff4a; transform: translateY(-2px); }
-  .btn-ghost {
-    display: inline-flex; align-items: center; gap: 10px;
-    border: 1px solid rgba(244,245,240,0.2);
-    color: var(--white);
-    padding: 16px 28px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 15px;
-    transition: border-color 0.2s, transform 0.15s;
-  }
-  .btn-ghost:hover { border-color: var(--lime); transform: translateY(-2px); }
-  .store-badges { display: flex; gap: 12px; flex-wrap: wrap; }
-  .store-badge {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--mid);
-    border: 1px solid rgba(244,245,240,0.1);
-    position: relative;
-    padding: 12px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: var(--white);
-    font-size: 13px;
-    font-weight: 500;
-    transition: border-color 0.2s, transform 0.15s;
-  }
-  .store-badge:hover { border-color: var(--lime); transform: translateY(-2px); }
-  .store-badge svg { opacity: 0.8; }
-  .store-badge .store-text { display: flex; flex-direction: column; }
-  .store-badge .store-label { font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
-  .store-badge .store-name { font-size: 14px; font-weight: 700; }
-  .store-badge .store-coming-soon {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    font-size: 9px;
-    color: var(--black);
-    background: var(--orange);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 999px;
-    padding: 2px 8px;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    line-height: 1;
+  /* animated court diagram — the signature */
+  .court-wrap{position:relative}
+  .court-svg{width:100%;height:auto;display:block;filter:drop-shadow(0 24px 48px rgba(0,0,0,.35))}
+  @keyframes dashdrift{to{stroke-dashoffset:-28}}
+  .rally-path{animation:dashdrift 1.4s linear infinite}
+  @media (prefers-reduced-motion:reduce){
+    .rally-path{animation:none}
+    *{transition:none!important}
   }
 
-  .waitlist {
-    margin-top: 36px;
-    max-width: 480px;
-    animation: fadeUp 0.6s 0.35s ease both;
+  /* live match card floating over the court */
+  .match-card{
+    position:absolute;right:-8px;bottom:-26px;z-index:3;
+    background:var(--paper);color:var(--ink);
+    border-radius:var(--radius);padding:18px 20px;width:min(300px,86%);
+    box-shadow:0 18px 44px rgba(4,18,34,.45);
   }
-  .waitlist-title {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--lime);
-    margin-bottom: 8px;
-  }
-  .waitlist-desc {
-    font-size: 14px;
-    color: var(--muted);
-    margin-bottom: 14px;
-    line-height: 1.5;
-  }
-  .waitlist-form {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .waitlist-form input[type="email"] {
-    flex: 1 1 200px;
-    min-width: 0;
-    background: var(--mid);
-    border: 1px solid rgba(244,245,240,0.12);
-    color: var(--white);
-    padding: 14px 16px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .waitlist-form input[type="email"]::placeholder { color: var(--muted); }
-  .waitlist-form input[type="email"]:focus { border-color: rgba(200,241,53,0.5); }
-  .waitlist-form input[type="email"].waitlist-glow {
-    animation: waitlistGlow 900ms ease-out;
-  }
-  @keyframes waitlistGlow {
-    0% { box-shadow: 0 0 0 rgba(200,241,53,0); }
-    30% { box-shadow: 0 0 0 3px rgba(200,241,53,0.12), 0 0 22px rgba(200,241,53,0.35); }
-    100% { box-shadow: 0 0 0 rgba(200,241,53,0); }
-  }
-  .waitlist-form button {
-    flex: 0 0 auto;
-    background: var(--lime);
-    color: var(--black);
-    border: none;
-    padding: 14px 22px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .waitlist-form button:hover:not(:disabled) { background: #d9ff4a; transform: translateY(-1px); }
-  .waitlist-form button:disabled { opacity: 0.6; cursor: not-allowed; }
-  .waitlist-msg {
-    margin-top: 12px;
-    font-size: 13px;
-    line-height: 1.4;
-  }
-  .waitlist-msg.is-success { color: var(--lime); }
-  .waitlist-msg.is-error { color: var(--orange); }
-  .waitlist--center {
-    margin: 0 auto 40px;
-    max-width: 440px;
-    text-align: center;
-  }
-  .waitlist--center .waitlist-form { justify-content: center; }
-  .falling-balls-layer {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 90;
-  }
-  .falling-ball {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 54px;
-    height: 54px;
-    aspect-ratio: 1;
-    margin-left: -27px;
-    margin-top: -27px;
-    border-radius: 50%;
-    overflow: hidden;
-    background:
-      radial-gradient(circle at 28% 24%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.18) 18%, rgba(255,255,255,0) 40%),
-      radial-gradient(circle at 36% 36%, #edff9d 0%, #c8f135 45%, #7f9f1b 100%);
-    border: 1px solid rgba(244,245,240,0.28);
-    box-shadow:
-      0 14px 28px rgba(200,241,53,0.2),
-      inset -12px -14px 22px rgba(0,0,0,0.22),
-      inset 10px 10px 18px rgba(255,255,255,0.18);
-    transform: translate3d(-120px, -120px, 0) rotate(0deg) scale(0.95);
-    animation: tennisRacketRicochet 1700ms cubic-bezier(0.2, 0.75, 0.25, 1) 120ms forwards;
-    will-change: transform;
-  }
-  .falling-ball::before,
-  .falling-ball::after {
-    content: '';
-    position: absolute;
-    inset: 12%;
-    border: 2px solid rgba(255,255,255,0.85);
-    border-radius: 50%;
-    opacity: 0.9;
-  }
-  .falling-ball::before { transform: rotate(32deg) scale(0.88, 0.55); }
-  .falling-ball::after { transform: rotate(-32deg) scale(0.88, 0.55); }
-  @keyframes tennisRacketRicochet {
-    0% { transform: translate3d(-120px, -120px, 0) rotate(0deg) scale(0.95); opacity: 0; }
-    8% { opacity: 1; }
-    62% { transform: translate3d(var(--hit-x, 72vw), var(--hit-y, 32vh), 0) rotate(760deg) scale(1); opacity: 1; }
-    100% { transform: translate3d(var(--exit-x, -220px), var(--exit-y, 112vh), 0) rotate(1500deg) scale(0.95); opacity: 0; }
-  }
-  .hit-smoke {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 56px;
-    height: 56px;
-    margin-left: -28px;
-    margin-top: -28px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(244,245,240,0.45) 0%, rgba(200,241,53,0.18) 35%, transparent 72%);
-    filter: blur(10px);
-    animation: smokePuff 700ms ease-out forwards;
-  }
-  .hit-streak {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: var(--len, 48px);
-    height: 3px;
-    margin-top: -1.5px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, rgba(244,245,240,0.85), rgba(200,241,53,0.55) 45%, transparent);
-    transform-origin: left center;
-    animation: streakBurst 480ms ease-out forwards;
-  }
-  .hit-ring {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 24px;
-    height: 24px;
-    margin-left: -12px;
-    margin-top: -12px;
-    border-radius: 50%;
-    border: 2px solid rgba(200,241,53,0.55);
-    box-shadow: 0 0 20px rgba(200,241,53,0.25);
-    animation: hitRing 500ms ease-out forwards;
-  }
-  @keyframes smokePuff {
-    0% { transform: translate(var(--sx), var(--sy)) scale(0.25); opacity: 0.75; }
-    100% { transform: translate(calc(var(--sx) + var(--dx)), calc(var(--sy) + var(--dy))) scale(1.9); opacity: 0; }
-  }
-  @keyframes streakBurst {
-    0% { transform: translate(var(--sx), var(--sy)) rotate(var(--rot)) scaleX(0.15); opacity: 0.95; }
-    100% { transform: translate(calc(var(--sx) + var(--dx)), calc(var(--sy) + var(--dy))) rotate(var(--rot)) scaleX(1.15); opacity: 0; }
-  }
-  @keyframes hitRing {
-    0% { transform: translate(var(--sx), var(--sy)) scale(0.4); opacity: 0.9; }
-    100% { transform: translate(var(--sx), var(--sy)) scale(3.6); opacity: 0; }
-  }
+  .match-card .tag{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--court);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .match-card .tag::before{content:"";width:8px;height:8px;border-radius:50%;background:#2FBF71;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .teams{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .team{font-weight:600;font-size:.92rem;line-height:1.35}
+  .team span{display:block;font-weight:400;font-size:.8rem;opacity:.6}
+  .score{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.25rem;color:var(--court)}
+  .match-meta{margin-top:12px;padding-top:12px;border-top:1.5px solid #E2E9F0;font-size:.8rem;opacity:.7}
 
-  /* HERO VISUAL */
-  .hero-visual {
-    position: absolute; right: 0; top: 0; bottom: 0;
-    width: 50%; display: flex; align-items: center; justify-content: center;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .hero-racket {
-    position: absolute;
-    z-index: 0;
-    width: min(420px, 55vw);
-    height: auto;
-    left: 20%;
-    top: 58%;
-    transform: translate(-50%, -34%) rotate(-36deg);
-    color: var(--lime);
-    opacity: 0.14;
-    animation: racketFloat 5s ease-in-out infinite;
-  }
-  body.hero-racket--pixi .hero-racket {
-    visibility: hidden;
-    pointer-events: none;
-  }
-  .hero-racket svg { width: 100%; height: auto; display: block; }
-  @keyframes racketFloat {
-    0%, 100% { transform: translate(-50%, -34%) rotate(-36deg); }
-    50% { transform: translate(-50%, -38%) rotate(-32deg); }
-  }
-  .phone-mockup {
-    position: relative;
-    z-index: 1;
-    animation: float 4s ease-in-out infinite;
-  }
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
-  .phone-frame {
-    width: 260px; height: 520px;
-    background: var(--mid);
-    border-radius: 36px;
-    border: 2px solid rgba(200,241,53,0.2);
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,241,53,0.05), inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-  .phone-screen {
-    position: absolute; inset: 0;
-    background: linear-gradient(160deg, #141714 0%, #0d110e 100%);
-    padding: 40px 20px 20px;
-  }
-  .phone-notch {
-    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
-    width: 80px; height: 6px;
-    background: rgba(200,241,53,0.3);
-    border-radius: 3px;
-  }
-  .phone-ui { color: var(--white); }
-  .phone-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 20px;
-  }
-  .phone-header-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--lime); }
-  .phone-avatar { width: 30px; height: 30px; background: var(--lime); border-radius: 50%; display:flex;align-items:center;justify-content:center; }
-  .phone-avatar span { font-size: 13px; font-weight: 700; color: var(--black); }
+  /* ---------- SECTIONS ---------- */
+  section{padding:clamp(72px,9vw,120px) clamp(20px,5vw,56px)}
+  .inner{max-width:1200px;margin:0 auto}
+  .section-head{max-width:46rem;margin-bottom:clamp(40px,5vw,64px)}
+  .section-head .eyebrow{color:var(--court)}
+  .section-head .eyebrow::before{background:var(--court)}
+  h2{font-size:clamp(2rem,4.4vw,3.4rem);margin-bottom:16px}
+  .section-head p{font-size:1.08rem;opacity:.75}
 
-  .court-card {
-    background: rgba(200,241,53,0.06);
-    border: 1px solid rgba(200,241,53,0.15);
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 10px;
-  }
-  .court-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-  .court-meta { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
-  .court-slots { display: flex; gap: 6px; flex-wrap: wrap; }
-  .slot {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-  .slot-free { background: rgba(200,241,53,0.2); color: var(--lime); border: 1px solid rgba(200,241,53,0.3); }
-  .slot-taken { background: rgba(255,107,43,0.1); color: var(--orange); border: 1px solid rgba(255,107,43,0.2); }
+  /* how it works — laid out like the three phases of a point */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--ink);border-radius:var(--radius);overflow:hidden}
+  .step{background:var(--paper);padding:34px 30px 38px}
+  .step .kicker{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--court);margin-bottom:16px}
+  .step h3{font-size:1.45rem;margin-bottom:12px}
+  .step p{font-size:.95rem;opacity:.75}
+  .step svg{display:block;margin-bottom:20px}
 
-  .match-card {
-    background: rgba(255,107,43,0.06);
-    border: 1px solid rgba(255,107,43,0.15);
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 10px;
-  }
-  .match-label { font-size: 9px; color: var(--orange); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; }
-  .match-teams { display: flex; justify-content: space-between; align-items: center; }
-  .team { font-size: 12px; font-weight: 700; }
-  .vs { font-size: 10px; color: var(--muted); }
-  .match-time { margin-top: 8px; font-size: 10px; color: var(--muted); }
+  /* level section — dark, court-side */
+  .level{background:var(--court-deep);color:var(--line)}
+  .level .section-head .eyebrow{color:var(--ball)}
+  .level .section-head .eyebrow::before{background:var(--ball)}
+  .level .section-head p{opacity:.8}
+  .level-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+  .level-bar{margin-bottom:26px}
+  .level-bar .lb-top{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:8px}
+  .level-bar .lb-top b{font-family:'JetBrains Mono',monospace}
+  .track{height:10px;border-radius:999px;background:rgba(244,248,252,.14);overflow:hidden}
+  .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--court),var(--ball));width:0;transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+  .level-copy li{list-style:none;padding-left:26px;position:relative;margin-bottom:14px;opacity:.9}
+  .level-copy li::before{content:"";position:absolute;left:0;top:.5em;width:12px;height:12px;border-radius:50%;border:3px solid var(--ball)}
+  .big-level{font-family:'Anton',sans-serif;font-size:clamp(4rem,8vw,7rem);color:var(--ball);line-height:1;margin-bottom:6px}
+  .big-level small{font-size:.35em;color:var(--line);opacity:.7;font-family:'JetBrains Mono',monospace;letter-spacing:.1em}
 
-  .phone-btn {
-    width: 100%;
-    background: var(--lime);
-    color: var(--black);
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 8px;
-    cursor: pointer;
-  }
+  /* clubs strip */
+  .clubs .inner{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+  .club-card{border:2px solid var(--ink);border-radius:var(--radius);padding:26px 28px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:transform .15s, box-shadow .15s;background:#fff}
+  .club-card:hover{transform:translateX(6px);box-shadow:-6px 6px 0 var(--court)}
+  .club-card h3{font-size:1.15rem}
+  .club-card p{font-size:.85rem;opacity:.65}
+  .slots{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--court);white-space:nowrap;font-weight:700}
 
-  .phone-glow {
-    position: absolute;
-    width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(200,241,53,0.15) 0%, transparent 70%);
-    bottom: -50px; left: 50%; transform: translateX(-50%);
-    pointer-events: none;
-  }
+  /* club owners — the back office */
+  .owners{background:var(--ink);color:var(--line)}
+  .owners .section-head .eyebrow{color:var(--ball)}
+  .owners .section-head .eyebrow::before{background:var(--ball)}
+  .owners .section-head p{opacity:.8}
+  .owners-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,5vw,72px);align-items:center}
+  .owner-points li{list-style:none;padding-left:26px;position:relative;margin-bottom:14px;opacity:.9}
+  .owner-points li::before{content:"";position:absolute;left:0;top:.5em;width:12px;height:12px;border-radius:3px;background:var(--ball)}
+  .owner-points b{color:var(--ball)}
 
-  /* STATS BAR */
-  .stats-bar {
-    background: var(--mid);
-    border-top: 1px solid rgba(200,241,53,0.08);
-    border-bottom: 1px solid rgba(200,241,53,0.08);
-    padding: 36px 48px;
-    display: flex; justify-content: center; gap: 80px; flex-wrap: wrap;
+  /* dashboard mockup */
+  .dash{
+    background:#0F2C4C;border:1px solid rgba(244,248,252,.14);border-radius:var(--radius);
+    padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.45);
   }
-  .stat { text-align: center; }
-  .stat-number {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 52px;
-    color: var(--lime);
-    line-height: 1;
-    letter-spacing: 2px;
-  }
-  .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
-  .stat--unavailable .stat-number {
-    filter: blur(10px);
-    opacity: 0.85;
-    user-select: none;
-  }
+  .dash-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  .dash-top h3{font-size:1rem;letter-spacing:.04em}
+  .dash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+  .kpi{background:rgba(244,248,252,.06);border-radius:10px;padding:14px}
+  .kpi .k-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6;margin-bottom:6px}
+  .kpi .k-val{font-family:'Anton',sans-serif;font-size:1.5rem;line-height:1}
+  .kpi .k-delta{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7BE29B;margin-top:6px}
+  .dash-chart{display:flex;align-items:flex-end;gap:8px;height:110px;padding:12px;background:rgba(244,248,252,.05);border-radius:10px;margin-bottom:14px}
+  .bar{flex:1;border-radius:5px 5px 0 0;background:var(--court);min-height:8px;position:relative;transition:height 1s cubic-bezier(.2,.7,.2,1)}
+  .bar.hot{background:var(--ball)}
+  .bar span{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:.58rem;opacity:.55}
+  .dash-book{display:flex;justify-content:space-between;gap:10px;font-size:.8rem;padding:11px 12px;border-radius:8px;background:rgba(244,248,252,.05);margin-top:6px}
+  .dash-book .mono{color:var(--ball);font-size:.72rem;white-space:nowrap}
 
-  /* FEATURES */
-  .section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
-  .section-label {
-    font-size: 11px;
-    color: var(--lime);
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-weight: 700;
-    margin-bottom: 16px;
-  }
-  h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(40px, 5vw, 72px);
-    line-height: 0.95;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-  }
-  .section-intro { font-size: 18px; color: var(--muted); max-width: 560px; line-height: 1.6; font-weight: 300; margin-bottom: 64px; }
+  /* pricing */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:clamp(40px,5vw,56px)}
+  .tier{border:1.5px solid rgba(244,248,252,.18);border-radius:var(--radius);padding:26px 24px;display:flex;flex-direction:column}
+  .tier.featured{border-color:var(--ball);background:rgba(228,255,60,.05);position:relative}
+  .tier .t-badge{position:absolute;top:-11px;left:24px;background:var(--ball);color:var(--court-deep);font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:999px;font-weight:700}
+  .tier h3{font-size:1.15rem;margin-bottom:6px}
+  .tier .t-for{font-size:.82rem;opacity:.65;margin-bottom:16px}
+  .tier .t-price{font-family:'Anton',sans-serif;font-size:2.2rem;line-height:1;margin-bottom:2px;filter:blur(9px);user-select:none;pointer-events:none;opacity:.8}
+  .tier .btn{text-align:center;pointer-events:none;opacity:.55;cursor:default}
+  .tier .btn:hover{transform:none;box-shadow:none}
+  .tiers-note{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ball);opacity:.85;text-align:center}
+  .tier .t-price small{font-family:'JetBrains Mono',monospace;font-size:.42em;opacity:.65;letter-spacing:.06em}
+  .tier ul{list-style:none;margin:18px 0 22px;flex:1}
+  .tier li{font-size:.86rem;opacity:.85;padding-left:20px;position:relative;margin-bottom:9px}
+  .tier li::before{content:"✓";position:absolute;left:0;color:var(--ball);font-weight:700}
 
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-  }
-  .feature-card {
-    background: var(--card);
-    padding: 40px 36px;
-    transition: background 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .feature-card:hover { background: #1e2219; }
-  .feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--lime);
-    transform: scaleX(0);
-    transition: transform 0.3s;
-  }
-  .feature-card:hover::before { transform: scaleX(1); }
-  .feature-icon {
-    width: 48px; height: 48px;
-    background: rgba(200,241,53,0.08);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 24px;
-    font-size: 22px;
-  }
-  .feature-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
-  .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  /* CTA */  .cta{background:linear-gradient(160deg,var(--court) 0%,var(--court-deep) 90%);color:var(--line);text-align:center;position:relative;overflow:hidden}
+  .cta::before{content:"";position:absolute;inset:0;background:linear-gradient(var(--glass),var(--glass)) 50% 0/2px 100% no-repeat;pointer-events:none}
+  .cta h2{font-size:clamp(2.4rem,5.5vw,4.2rem)}
+  .cta p{max-width:34rem;margin:16px auto 34px;opacity:.85}
+  footer{background:var(--court-deep);color:var(--line);padding:28px clamp(20px,5vw,56px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.85rem;border-top:1px solid rgba(244,248,252,.12)}
+  footer .mono{opacity:.6}
 
-  /* HOW IT WORKS */
-  .how-section {
-    padding: 100px 48px;
-    background: var(--mid);
-  }
-  .how-inner { max-width: 1200px; margin: 0 auto; }
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-top: 64px; position: relative; }
-  .steps::before {
-    content: '';
-    position: absolute;
-    top: 24px; left: 48px; right: 48px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(200,241,53,0.3), transparent);
-  }
-  .step { position: relative; }
-  .step-number {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 64px;
-    color: rgba(200,241,53,0.15);
-    line-height: 1;
-    margin-bottom: 12px;
-  }
-  .step-dot {
-    width: 12px; height: 12px;
-    background: var(--lime);
-    border-radius: 50%;
-    margin-bottom: 20px;
-    position: relative;
-    box-shadow: 0 0 20px rgba(200,241,53,0.5);
-  }
-  .step-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-  /* MANAGERS CTA */
-  .managers-section {
-    padding: 100px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-  .managers-inner {
-    max-width: 1200px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
-  }
-  .managers-bg {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(255,107,43,0.04) 0%, transparent 60%);
-  }
-  .managers-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(255,107,43,0.12);
-    border: 1px solid rgba(255,107,43,0.25);
-    padding: 6px 14px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--orange);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-  .btn-orange {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--orange);
-    color: var(--white);
-    padding: 16px 32px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.5px;
-    margin-top: 36px;
-    transition: transform 0.15s, background 0.2s;
-  }
-  .btn-orange:hover { background: #ff7d43; transform: translateY(-2px); }
-
-  .dashboard-mockup {
-    background: var(--card);
-    border: 1px solid rgba(255,107,43,0.2);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.4);
-  }
-  .dash-topbar {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  .dash-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--orange); }
-  .dash-date { font-size: 12px; color: var(--muted); }
-  .dash-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-  .dash-stat {
-    background: rgba(255,107,43,0.06);
-    border: 1px solid rgba(255,107,43,0.12);
-    padding: 16px;
-    border-radius: 8px;
-  }
-  .dash-stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--orange); }
-  .dash-stat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-
-  .court-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 13px;
-  }
-  .court-row:last-child { border-bottom: none; }
-  .court-name-small { font-weight: 600; }
-  .court-status { display: flex; gap: 4px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-  .dot-free { background: var(--lime); }
-  .dot-busy { background: var(--orange); }
-  .dot-maint { background: var(--muted); }
-  .court-revenue { font-size: 12px; color: var(--lime); font-weight: 600; }
-
-  /* TESTIMONIALS */
-  .testimonials-section { padding: 100px 48px; }
-  .testimonials-inner { max-width: 1200px; margin: 0 auto; }
-  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
-  .testimonial {
-    background: var(--card);
-    border: 1px solid rgba(255,255,255,0.06);
-    padding: 32px;
-    border-radius: 12px;
-    position: relative;
-    transition: border-color 0.2s;
-  }
-  .testimonial:hover { border-color: rgba(200,241,53,0.25); }
-  .testimonial-quote { font-size: 15px; line-height: 1.7; color: #c8cdc3; margin-bottom: 24px; font-weight: 300; }
-  .testimonial-author { display: flex; align-items: center; gap: 12px; }
-  .author-avatar {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 14px;
-    color: var(--black);
-  }
-  .author-name { font-size: 14px; font-weight: 700; }
-  .author-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .stars { color: var(--lime); font-size: 12px; margin-bottom: 16px; }
-
-  /* FOOTER CTA */
-  .footer-cta {
-    padding: 120px 48px;
-    text-align: center;
-    background: var(--mid);
-    position: relative;
-    overflow: hidden;
-  }
-  .footer-cta-bg {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,241,53,0.06) 0%, transparent 70%);
-  }
-  .footer-cta-content { position: relative; z-index: 2; }
-  .footer-cta h2 { font-size: clamp(48px, 7vw, 100px); margin-bottom: 24px; }
-  .footer-cta p { font-size: 18px; color: var(--muted); max-width: 480px; margin: 0 auto 48px; line-height: 1.6; }
-  .footer-actions { display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .footer-actions .store-btn { position: relative; }
-  .footer-actions .store-btn .btn-label { font-size: 15px; font-weight: 700; }
-  .footer-actions .store-btn .btn-coming-soon {
-    position: absolute;
-    top: -8px;
-    right: -6px;
-    font-size: 9px;
-    color: var(--black);
-    background: var(--orange);
-    border: 1px solid var(--orange);
-    border-radius: 999px;
-    padding: 2px 8px;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    line-height: 1;
-  }
-
-  footer {
-    padding: 40px 48px;
-    display: flex; justify-content: space-between; align-items: center;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    flex-wrap: wrap; gap: 20px;
-  }
-  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--lime); }
-  .footer-links { display: flex; gap: 28px; }
-  .footer-links a { text-decoration: none; color: var(--muted); font-size: 13px; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--white); }
-  .footer-copy { font-size: 12px; color: var(--muted); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (max-width: 900px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    .hero { padding: 100px 24px 60px; }
-    .hero-visual { display: none; }
-    .stats-bar { gap: 40px; padding: 36px 24px; }
-    .section { padding: 80px 24px; }
-    .features-grid { grid-template-columns: 1fr; gap: 2px; }
-    .how-section { padding: 80px 24px; }
-    .steps { grid-template-columns: 1fr 1fr; }
-    .steps::before { display: none; }
-    .managers-section { padding: 80px 24px; }
-    .managers-inner { grid-template-columns: 1fr; }
-    .testimonials-section { padding: 80px 24px; }
-    .testimonials-grid { grid-template-columns: 1fr; }
-    .footer-cta { padding: 80px 24px; }
-    footer { padding: 32px 24px; }
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .hero-grid,.level-grid,.clubs .inner,.owners-grid{grid-template-columns:1fr}
+    .steps,.tiers{grid-template-columns:1fr}
+    .nav-links li:not(:last-child){display:none}
+    .match-card{position:static;margin:18px auto 0}
+    .court-wrap{max-width:440px;margin:0 auto}
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">PadelMatch<span>.xyz</span></div>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#how">How It Works</a>
-    <a href="#testimonials">Reviews</a>
-    <a href="#waitlist">Waitlist</a>
-    <a href="#managers" class="nav-cta">Court Managers →</a>
-  </div>
+<nav aria-label="Main">
+  <a class="logo" href="#"><span class="dot" aria-hidden="true"></span><span>PADELMATCH<span style="color:var(--ball)">.XYZ</span></span></a>
+  <ul class="nav-links">
+    <li><a href="#play">How it works</a></li>
+    <li><a href="#level">Your level</a></li>
+    <li><a href="#clubs">Clubs</a></li>
+    <li><a href="#for-owners">For club owners</a></li>
+    <li><a class="btn" href="#download">Get the app</a></li>
+  </ul>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div id="hero-pixi" class="hero-pixi" aria-hidden="true"></div>
-  <div class="hero-content">
-    <div class="hero-badge">Platform & Apps launching soon</div>
-    <h1>Find.<br><span class="accent">Book.</span><br><span class="stroke">Dominate.</span></h1>
-    <p class="hero-sub">The ultimate padel companion. Book courts, organize matches, track your game — all in one place.</p>
-    <!-- <div class="store-badges">
-      <a href="#" class="store-badge">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        <div class="store-text">
-          <span class="store-label">Download on the</span>
-          <span class="store-name">App Store</span>
-          <span class="store-coming-soon">Coming Soon</span>
-        </div>
-      </a>
-      <a href="#" class="store-badge">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.65.19.99.07L15.35 12 11.2 7.85 3.18 23.76zM20.65 10.29l-2.6-1.49-3.36 3.35 3.36 3.35 2.61-1.5c.74-.43.74-1.28-.01-1.71zM2.01 1.33C1.96 1.5 1.94 1.69 1.94 1.9v20.2c0 .21.02.4.08.57L13.5 12 2.01 1.33zM15.35 12L4.17.24C3.83.12 3.47.14 3.18.3L11.2 8.35 15.35 12z"/></svg>
-        <div class="store-text">
-          <span class="store-label">Get it on</span>
-          <span class="store-name">Google Play</span>
-          <span class="store-coming-soon">Coming Soon</span>
-        </div>
-      </a>
-    </div> -->
-    <div class="waitlist" id="waitlist">
-      <p class="waitlist-title">Join the waitlist</p>
-      <p class="waitlist-desc">Get an email when the iOS and Android apps are available.</p>
-      <form class="waitlist-form" data-waitlist-form data-source="hero">
-        <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required>
-        <button type="submit">Join waitlist</button>
-      </form>
-      <p class="waitlist-msg" data-waitlist-msg hidden></p>
-    </div>
-  </div>
-
-  <!-- Phone mockup -->
-  <div class="hero-visual">
-    <div class="hero-racket" aria-hidden="true">
-      <svg viewBox="0 0 200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="racketHead" x1="100" y1="30" x2="100" y2="200" gradientUnits="userSpaceOnUse">
-            <stop stop-color="currentColor" stop-opacity="0.35"/>
-            <stop offset="1" stop-color="currentColor" stop-opacity="0.08"/>
-          </linearGradient>
-        </defs>
-        <path d="M100 24 C48 24 22 72 22 118 C22 168 48 198 100 198 C152 198 178 168 178 118 C178 72 152 24 100 24 Z" stroke="currentColor" stroke-width="3" fill="url(#racketHead)"/>
-        <circle class="racket-hit-point" cx="100" cy="111" r="1" fill="transparent"/>
-        <g fill="currentColor" opacity="0.45">
-          <circle cx="72" cy="78" r="5"/><circle cx="100" cy="78" r="5"/><circle cx="128" cy="78" r="5"/>
-          <circle cx="58" cy="102" r="5"/><circle cx="86" cy="102" r="5"/><circle cx="114" cy="102" r="5"/><circle cx="142" cy="102" r="5"/>
-          <circle cx="72" cy="126" r="5"/><circle cx="100" cy="126" r="5"/><circle cx="128" cy="126" r="5"/>
-          <circle cx="58" cy="150" r="5"/><circle cx="86" cy="150" r="5"/><circle cx="114" cy="150" r="5"/><circle cx="142" cy="150" r="5"/>
-          <circle cx="72" cy="174" r="5"/><circle cx="100" cy="174" r="5"/><circle cx="128" cy="174" r="5"/>
-        </g>
-        <path d="M88 198 L88 218 L112 218 L112 198" stroke="currentColor" stroke-width="2.5" fill="none"/>
-        <rect x="86" y="218" width="28" height="168" rx="10" stroke="currentColor" stroke-width="3" fill="currentColor" fill-opacity="0.12"/>
-        <rect x="92" y="230" width="16" height="140" rx="6" fill="currentColor" fill-opacity="0.2"/>
-        <g stroke="currentColor" stroke-width="1.5" opacity="0.35">
-          <line x1="90" y1="260" x2="110" y2="260"/><line x1="90" y1="285" x2="110" y2="285"/>
-          <line x1="90" y1="310" x2="110" y2="310"/><line x1="90" y1="335" x2="110" y2="335"/>
-        </g>
-        <ellipse cx="100" cy="392" rx="16" ry="6" fill="currentColor" fill-opacity="0.25"/>
-      </svg>
-    </div>
-    <div class="phone-mockup">
-      <div class="phone-frame">
-        <div class="phone-screen">
-          <div class="phone-notch"></div>
-          <div class="phone-ui">
-            <div class="phone-header">
-              <div class="phone-header-title">padelmatch.xyz</div>
-              <div class="phone-avatar"><span>JD</span></div>
-            </div>
-
-            <div class="court-card">
-              <div class="court-name">Club Padel Pro — Court 1</div>
-              <div class="court-meta">📍 Nicosia · Indoor · Premium</div>
-              <div class="court-slots">
-                <span class="slot slot-free">08:00</span>
-                <span class="slot slot-taken">09:30</span>
-                <span class="slot slot-free">11:00</span>
-                <span class="slot slot-taken">12:30</span>
-                <span class="slot slot-free">14:00</span>
-                <span class="slot slot-free">15:30</span>
-              </div>
-            </div>
-
-            <div class="court-card">
-              <div class="court-name">Arena Padel — Court 3</div>
-              <div class="court-meta">📍 Limassol · Outdoor · Standard</div>
-              <div class="court-slots">
-                <span class="slot slot-taken">09:00</span>
-                <span class="slot slot-taken">10:30</span>
-                <span class="slot slot-free">12:00</span>
-                <span class="slot slot-free">13:30</span>
-              </div>
-            </div>
-
-            <div class="match-card">
-              <div class="match-label">⚡ Upcoming Match</div>
-              <div class="match-teams">
-                <span class="team">You & Alex</span>
-                <span class="vs">vs</span>
-                <span class="team">Maria & Sam</span>
-              </div>
-              <div class="match-time">Tomorrow · 15:30 · Court 2</div>
-            </div>
-
-            <button class="phone-btn">Book a Court Now</button>
-          </div>
-        </div>
-      </div>
-      <div class="phone-glow"></div>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<div class="stats-bar">
-  <div class="stat stat--unavailable">
-    <div class="stat-number">12K+</div>
-    <div class="stat-label">Active Players</div>
-  </div>
-  <div class="stat stat--unavailable">
-    <div class="stat-number">340+</div>
-    <div class="stat-label">Courts Available</div>
-  </div>
-  <div class="stat stat--unavailable">
-    <div class="stat-number">98K</div>
-    <div class="stat-label">Matches Booked</div>
-  </div>
-  <div class="stat stat--unavailable">
-    <div class="stat-number">4.9★</div>
-    <div class="stat-label">App Store Rating</div>
-  </div>
-</div>
-
-<!-- FEATURES -->
-<section id="features" style="padding:100px 0;">
-  <div class="section">
-    <div class="section-label">For Players</div>
-    <h2>Everything You<br>Need to <span style="color:var(--lime)">Play</span></h2>
-    <p class="section-intro">From finding a court to rallying your crew — padelmatch.xyz has every shot covered.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🎾</div>
-        <div class="feature-title">Real-Time Court Booking</div>
-        <div class="feature-desc">See live availability at courts near you. Book in seconds with instant confirmation. No calls, no waiting.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <div class="feature-title">Match Matchmaking</div>
-        <div class="feature-desc">Find players at your skill level. Join open matches or create your own and let padelmatch.xyz fill the spots.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">👥</div>
-        <div class="feature-title">Team & Groups</div>
-        <div class="feature-desc">Create your regular crew, manage recurring bookings, and coordinate schedules without the group chat chaos.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <div class="feature-title">Player Stats & Ranking</div>
-        <div class="feature-desc">Track your wins, match history, and rise through the padelmatch.xyz leaderboard. Every game counts.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔔</div>
-        <div class="feature-title">Smart Notifications</div>
-        <div class="feature-desc">Cancellation alerts, open slot notifications near you, and match reminders so you never miss a game.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">💳</div>
-        <div class="feature-title">In-App Payments</div>
-        <div class="feature-desc">Pay securely within the app. Split costs with teammates. Digital receipts, refunds, and wallet included.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section id="how" class="how-section">
-  <div class="how-inner">
-    <div class="section-label">How It Works</div>
-    <h2>On Court in<br><span style="color:var(--lime)">4 Steps</span></h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-number">01</div>
-        <div class="step-dot"></div>
-        <div class="step-title">Download & Sign Up</div>
-        <div class="step-desc">Create your profile in under a minute. Set your skill level and location to get personalized results.</div>
-      </div>
-      <div class="step">
-        <div class="step-number">02</div>
-        <div class="step-dot"></div>
-        <div class="step-title">Find a Court</div>
-        <div class="step-desc">Browse courts near you with real-time availability. Filter by date, time, indoor/outdoor, and price.</div>
-      </div>
-      <div class="step">
-        <div class="step-number">03</div>
-        <div class="step-dot"></div>
-        <div class="step-title">Invite Your Team</div>
-        <div class="step-desc">Add your partners directly in the app. They get an instant notification to confirm the match.</div>
-      </div>
-      <div class="step">
-        <div class="step-number">04</div>
-        <div class="step-dot"></div>
-        <div class="step-title">Play & Track</div>
-        <div class="step-desc">Show up, play, and log results. Your stats update automatically after each match.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COURT MANAGERS -->
-<section id="managers" class="managers-section">
-  <div class="managers-bg"></div>
-  <div class="managers-inner">
+<header>
+  <div class="hero-grid">
     <div>
-      <div class="managers-badge">Court Managers</div>
-      <h2>Run Your Club<br><span style="color:var(--orange)">Smarter</span></h2>
-      <p style="font-size:17px;color:var(--muted);line-height:1.7;font-weight:300;margin-top:16px;">padelmatch.xyz's desktop dashboard gives club owners and court managers full control. Manage bookings, monitor occupancy, and grow your revenue — all from one powerful platform.</p>
-      <ul style="margin-top:28px;list-style:none;display:flex;flex-direction:column;gap:14px;">
-        <li style="display:flex;align-items:flex-start;gap:12px;font-size:15px;">
-          <span style="color:var(--orange);font-size:18px;margin-top:-1px;">→</span>
-          <span><strong>Live court calendar</strong> — See every booking in real time, drag to rearrange</span>
-        </li>
-        <li style="display:flex;align-items:flex-start;gap:12px;font-size:15px;">
-          <span style="color:var(--orange);font-size:18px;margin-top:-1px;">→</span>
-          <span><strong>Revenue analytics</strong> — Daily, weekly, and monthly income reports</span>
-        </li>
-        <li style="display:flex;align-items:flex-start;gap:12px;font-size:15px;">
-          <span style="color:var(--orange);font-size:18px;margin-top:-1px;">→</span>
-          <span><strong>Player database</strong> — Member profiles, booking history, and loyalty tiers</span>
-        </li>
-        <li style="display:flex;align-items:flex-start;gap:12px;font-size:15px;">
-          <span style="color:var(--orange);font-size:18px;margin-top:-1px;">→</span>
-          <span><strong>Automated billing</strong> — Invoicing and payment reconciliation done for you</span>
-        </li>
+      <p class="eyebrow">Padel · Matches · Courts</p>
+      <h1>Never play<br>the same match<br><span class="hollow">twice.</span></h1>
+      <p class="hero-sub">PADELMATCH.XYZ matches you with players at your exact level, books the court, and splits the fee four ways — so all you bring is your racket.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="#download">Download free</a>
+        <a class="btn ghost" href="#play">See how it works</a>
+      </div>
+      <p class="store-note">iOS · Android — free to join, pay per court</p>
+    </div>
+
+    <div class="court-wrap" aria-hidden="true">
+      <!-- top-down padel court: glass walls, turf, service boxes -->
+      <svg class="court-svg" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Top-down diagram of a padel court">
+        <!-- glass wall frame -->
+        <rect x="8" y="8" width="364" height="324" rx="10" fill="rgba(244,248,252,.06)" stroke="rgba(244,248,252,.55)" stroke-width="3"/>
+        <!-- turf -->
+        <rect x="26" y="26" width="328" height="288" rx="4" fill="#2166B4"/>
+        <!-- court lines -->
+        <g stroke="#F4F8FC" stroke-width="3" opacity=".95">
+          <line x1="190" y1="26" x2="190" y2="314"/>              <!-- net -->
+          <line x1="96"  y1="26" x2="96"  y2="314"/>              <!-- service line L -->
+          <line x1="284" y1="26" x2="284" y2="314"/>              <!-- service line R -->
+          <line x1="26"  y1="170" x2="96"  y2="170"/>             <!-- center L -->
+          <line x1="284" y1="170" x2="354" y2="170"/>             <!-- center R -->
+        </g>
+        <!-- net posts -->
+        <circle cx="190" cy="20" r="5" fill="#F4F8FC"/>
+        <circle cx="190" cy="320" r="5" fill="#F4F8FC"/>
+        <!-- rally trajectory, a closed loop played off the glass -->
+        <path id="rally" class="rally-path"
+              d="M 45 295 L 160 34 L 348 170 L 120 308 L 336 50 L 45 295"
+              fill="none" stroke="#E4FF3C" stroke-width="2" stroke-dasharray="6 8" opacity=".5"/>
+        <!-- glass-contact marks where the ball rebounds -->
+        <g fill="none" stroke="#E4FF3C" stroke-width="2" opacity=".85">
+          <circle cx="160" cy="34"  r="6"><animate attributeName="r" values="4;8;4" dur="6s" begin="1.05s" repeatCount="indefinite"/></circle>
+          <circle cx="348" cy="170" r="6"><animate attributeName="r" values="4;8;4" dur="6s" begin="2.25s" repeatCount="indefinite"/></circle>
+          <circle cx="120" cy="308" r="6"><animate attributeName="r" values="4;8;4" dur="6s" begin="3.6s"  repeatCount="indefinite"/></circle>
+        </g>
+        <!-- the ball -->
+        <g>
+          <circle r="14" fill="#E4FF3C" opacity=".25">
+            <animateMotion dur="6s" repeatCount="indefinite"><mpath href="#rally"/></animateMotion>
+          </circle>
+          <circle r="7" fill="#E4FF3C" stroke="#F7FFB0" stroke-width="2">
+            <animateMotion dur="6s" repeatCount="indefinite"><mpath href="#rally"/></animateMotion>
+          </circle>
+        </g>
+      </svg>
+
+      <aside class="match-card">
+        <p class="tag">Open match · Live</p>
+        <div class="teams">
+          <p class="team">Marco &amp; Elena<span>Lvl 3.2 · 3.4</span></p>
+          <p class="score">6–4 · 3–2</p>
+          <p class="team">You &amp; Andreas<span>Lvl 3.3 · 3.1</span></p>
+        </div>
+        <p class="match-meta">Court 2 · Tonight 19:30 · €6.50 each</p>
+      </aside>
+    </div>
+  </div>
+</header>
+
+<section id="play">
+  <div class="inner">
+    <div class="section-head">
+      <p class="eyebrow">Serve · Rally · Point</p>
+      <h2>From “anyone free?” to match point in three taps</h2>
+      <p>Every match on PADELMATCH.XYZ runs the way a good point does — a clean start, a fair rally, a clear result.</p>
+    </div>
+    <div class="steps">
+      <article class="step">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="22" cy="22" r="19" stroke="#1E5FA8" stroke-width="3"/><circle cx="22" cy="22" r="7" fill="#E4FF3C" stroke="#0A2440" stroke-width="2.5"/></svg>
+        <p class="kicker">The serve</p>
+        <h3>Post or join a match</h3>
+        <p>Open matches near you, filtered by level, time, and side of the court you like to play. One tap reserves your spot.</p>
+      </article>
+      <article class="step">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="4" y="8" width="36" height="28" rx="4" stroke="#1E5FA8" stroke-width="3"/><line x1="22" y1="8" x2="22" y2="36" stroke="#1E5FA8" stroke-width="3"/><circle cx="31" cy="17" r="4" fill="#E4FF3C" stroke="#0A2440" stroke-width="2"/></svg>
+        <p class="kicker">The rally</p>
+        <h3>Court booked, fee split</h3>
+        <p>We hold the court at a partner club and split the price four ways automatically. No group-chat maths, no no-shows unpunished.</p>
+      </article>
+      <article class="step">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M8 36 L18 22 L26 28 L38 8" stroke="#1E5FA8" stroke-width="3" stroke-linecap="round"/><circle cx="38" cy="8" r="5" fill="#E4FF3C" stroke="#0A2440" stroke-width="2.5"/></svg>
+        <p class="kicker">The point</p>
+        <h3>Log the score, level up</h3>
+        <p>Report the result in seconds. Your level adjusts after every set, so your next match is always the right one.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="level" id="level">
+  <div class="inner level-grid">
+    <div class="section-head" style="margin-bottom:0">
+      <p class="eyebrow">Level engine</p>
+      <h2>A number that actually means something</h2>
+      <p>Self-rated levels lie. Your PADELMATCH.XYZ level is earned on court — every set you play against every opponent refines it, from 0.5 (first racket) to 7.0 (tour-grade).</p>
+      <ul class="level-copy" style="margin-top:26px">
+        <li>Recalculated after each match, weighted by opponent strength</li>
+        <li>Separate reliability score — the more you play, the more it trusts you</li>
+        <li>Matchmaking keeps all four players within ±0.4</li>
       </ul>
-      <a href="#" class="btn-orange">Access Manager Portal →</a>
     </div>
-
-    <div class="dashboard-mockup">
-      <div class="dash-topbar">
-        <div class="dash-title">Manager Dashboard</div>
-        <div class="dash-date">Mon, Apr 27 · Live</div>
-      </div>
-      <div class="dash-stats">
-        <div class="dash-stat">
-          <div class="dash-stat-val">€840</div>
-          <div class="dash-stat-lbl">Today's Revenue</div>
-        </div>
-        <div class="dash-stat">
-          <div class="dash-stat-val">18</div>
-          <div class="dash-stat-lbl">Bookings Today</div>
-        </div>
-        <div class="dash-stat">
-          <div class="dash-stat-val">87%</div>
-          <div class="dash-stat-lbl">Occupancy Rate</div>
-        </div>
-      </div>
-      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;font-weight:700;">Court Status</div>
-      <div class="court-row">
-        <div class="court-name-small">Court 1 — Indoor Pro</div>
-        <div class="court-status">
-          <span class="dot dot-busy"></span><span class="dot dot-busy"></span><span class="dot dot-free"></span><span class="dot dot-free"></span>
-        </div>
-        <div class="court-revenue">€280</div>
-      </div>
-      <div class="court-row">
-        <div class="court-name-small">Court 2 — Indoor Standard</div>
-        <div class="court-status">
-          <span class="dot dot-busy"></span><span class="dot dot-free"></span><span class="dot dot-free"></span><span class="dot dot-free"></span>
-        </div>
-        <div class="court-revenue">€210</div>
-      </div>
-      <div class="court-row">
-        <div class="court-name-small">Court 3 — Outdoor</div>
-        <div class="court-status">
-          <span class="dot dot-maint"></span><span class="dot dot-maint"></span><span class="dot dot-maint"></span><span class="dot dot-maint"></span>
-        </div>
-        <div class="court-revenue" style="color:var(--muted)">Maintenance</div>
-      </div>
-      <div class="court-row">
-        <div class="court-name-small">Court 4 — Outdoor</div>
-        <div class="court-status">
-          <span class="dot dot-busy"></span><span class="dot dot-busy"></span><span class="dot dot-busy"></span><span class="dot dot-free"></span>
-        </div>
-        <div class="court-revenue">€350</div>
-      </div>
+    <div>
+      <p class="big-level" id="lvl">3.3 <small>RELIABILITY 87%</small></p>
+      <div class="level-bar"><div class="lb-top"><span>Defence at the glass</span><b>72</b></div><div class="track"><div class="fill" data-w="72%"></div></div></div>
+      <div class="level-bar"><div class="lb-top"><span>Net game</span><b>64</b></div><div class="track"><div class="fill" data-w="64%"></div></div></div>
+      <div class="level-bar"><div class="lb-top"><span>Bandeja &amp; víbora</span><b>58</b></div><div class="track"><div class="fill" data-w="58%"></div></div></div>
+      <div class="level-bar"><div class="lb-top"><span>Consistency</span><b>81</b></div><div class="track"><div class="fill" data-w="81%"></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section id="testimonials" class="testimonials-section">
-  <div class="testimonials-inner">
-    <div class="section-label">Player Reviews</div>
-    <h2>The Court <span style="color:var(--lime)">Speaks</span></h2>
-    <div class="testimonials-grid">
-      <div class="testimonial">
-        <div class="stars">★★★★★</div>
-        <div class="testimonial-quote">Booking a court used to be a nightmare of WhatsApp messages. Now I do it in 30 seconds. The matchmaking feature found me regular partners in my first week.</div>
-        <div class="testimonial-author">
-          <div class="author-avatar" style="background:var(--lime);">M</div>
-          <div>
-            <div class="author-name">Marcos D.</div>
-            <div class="author-role">Amateur Player · Nicosia</div>
-          </div>
-        </div>
+<section class="clubs" id="clubs">
+  <div class="inner">
+    <div>
+      <div class="section-head" style="margin-bottom:28px">
+        <p class="eyebrow">Partner clubs</p>
+        <h2>Real courts, real availability</h2>
+        <p>Live slots from clubs in your city — no phone calls, no “fully booked” surprises at the gate.</p>
       </div>
-      <div class="testimonial">
-        <div class="stars">★★★★★</div>
-        <div class="testimonial-quote">My group uses it every week. The team scheduling alone is worth it. We never double-book, and the reminders mean nobody's a no-show anymore.</div>
-        <div class="testimonial-author">
-          <div class="author-avatar" style="background:var(--orange);">S</div>
-          <div>
-            <div class="author-name">Sophie K.</div>
-            <div class="author-role">Club Member · Limassol</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial">
-        <div class="stars">★★★★★</div>
-        <div class="testimonial-quote">The stats tracking got me hooked. Watching my ranking climb after each match is weirdly addictive. Best sports app I've used, full stop.</div>
-        <div class="testimonial-author">
-          <div class="author-avatar" style="background:#7C6FCD;">A</div>
-          <div>
-            <div class="author-name">Alex P.</div>
-            <div class="author-role">Competitive Player · Paphos</div>
-          </div>
-        </div>
-      </div>
+      <a class="btn" style="background:var(--court);color:var(--line)" href="#download">Browse clubs near you</a>
+    </div>
+    <div>
+      <div class="club-card"><div><h3>Riverside Padel Club</h3><p>4 courts · Panoramic glass · Lit until 23:00</p></div><p class="slots">6 slots tonight</p></div>
+      <div class="club-card"><div><h3>La Jaula Padel Center</h3><p>6 courts · 2 indoor · Pro shop &amp; café</p></div><p class="slots">3 slots tonight</p></div>
+      <div class="club-card"><div><h3>Coastline Racquets</h3><p>3 courts · Sea breeze, book early</p></div><p class="slots">Full — join waitlist</p></div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER CTA -->
-<section class="footer-cta">
-  <div class="footer-cta-bg"></div>
-  <div class="footer-cta-content">
-    <h2>Ready to<br><span style="color:var(--lime)">Play?</span></h2>
-    <p>Be first on the court — join the waitlist and we'll email you when the platform & apps launch.</p>
-    <div class="waitlist waitlist--center">
-      <p class="waitlist-title">Join the waitlist</p>
-      <form class="waitlist-form" data-waitlist-form data-source="footer">
-        <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required>
-        <button type="submit">Notify me</button>
-      </form>
-      <p class="waitlist-msg" data-waitlist-msg hidden></p>
+<section class="owners" id="for-owners">
+  <div class="inner">
+    <div class="owners-grid">
+      <div>
+        <div class="section-head" style="margin-bottom:26px">
+          <p class="eyebrow">PADELMATCH.XYZ for Clubs</p>
+          <h2>Run your venue from one screen</h2>
+          <p>A web back office built for padel clubs — not a generic gym tool with courts bolted on.</p>
+        </div>
+        <ul class="owner-points">
+          <li><b>Court management</b> — schedules, pricing rules, peak/off-peak rates, lighting add-ons, maintenance blocks</li>
+          <li><b>Bookings that fill themselves</b> — your empty slots surface automatically to nearby players at the right level</li>
+          <li><b>Revenue &amp; occupancy analytics</b> — see which courts, hours, and price points actually make you money</li>
+          <li><b>No-show protection</b> — prepaid bookings and automatic waitlist backfill</li>
+        </ul>
+      </div>
+
+      <div class="dash" role="img" aria-label="Preview of the club dashboard showing revenue, occupancy and upcoming bookings">
+        <div class="dash-top">
+          <h3>RIVERSIDE PADEL CLUB — TODAY</h3>
+          <span class="mono" style="font-size:.7rem;opacity:.6">TUE 14 JUL</span>
+        </div>
+        <div class="dash-kpis">
+          <div class="kpi"><p class="k-label">Revenue</p><p class="k-val">€1,240</p><p class="k-delta">▲ 18% vs last Tue</p></div>
+          <div class="kpi"><p class="k-label">Occupancy</p><p class="k-val">86%</p><p class="k-delta">▲ 9 pts</p></div>
+          <div class="kpi"><p class="k-label">Bookings</p><p class="k-val">31</p><p class="k-delta">4 from waitlist</p></div>
+        </div>
+        <div class="dash-chart" aria-hidden="true">
+          <div class="bar" style="height:28%"><span>08</span></div>
+          <div class="bar" style="height:40%"><span>10</span></div>
+          <div class="bar" style="height:34%"><span>12</span></div>
+          <div class="bar" style="height:52%"><span>14</span></div>
+          <div class="bar" style="height:66%"><span>16</span></div>
+          <div class="bar hot" style="height:96%"><span>18</span></div>
+          <div class="bar hot" style="height:100%"><span>20</span></div>
+          <div class="bar" style="height:58%"><span>22</span></div>
+        </div>
+        <div class="dash-book"><span>Court 1 · Open match (4/4) · Lvl 3.0–3.5</span><span class="mono">19:30 · PAID</span></div>
+        <div class="dash-book"><span>Court 3 · Private booking · M. Ioannou</span><span class="mono">20:00 · PAID</span></div>
+        <div class="dash-book"><span>Court 2 · Waitlist backfill · 2 joined</span><span class="mono">21:30 · PENDING</span></div>
+      </div>
     </div>
-    <!-- <div class="footer-actions">
-      <a href="#" class="btn-primary store-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        <span class="btn-label">App Store</span>
-        <span class="btn-coming-soon">Coming Soon</span>
-      </a>
-      <a href="#" class="btn-primary store-btn" style="background:var(--white)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--black)"><path d="M3.18 23.76c.3.17.65.19.99.07L15.35 12 11.2 7.85 3.18 23.76zM20.65 10.29l-2.6-1.49-3.36 3.35 3.36 3.35 2.61-1.5c.74-.43.74-1.28-.01-1.71zM2.01 1.33C1.96 1.5 1.94 1.69 1.94 1.9v20.2c0 .21.02.4.08.57L13.5 12 2.01 1.33zM15.35 12L4.17.24C3.83.12 3.47.14 3.18.3L11.2 8.35 15.35 12z"/></svg>
-        <span class="btn-label">Google Play</span>
-        <span class="btn-coming-soon">Coming Soon</span>
-      </a>
-      <a href="#managers" class="btn-ghost store-btn">I manage a club → <span class="btn-coming-soon">Coming Soon</span></a>
-    </div> -->
+
+    <div class="tiers">
+      <div class="tier">
+        <h3>Starter</h3>
+        <p class="t-for">Up to 3 courts</p>
+        <p class="t-price">€29<small> /COURT/MO</small></p>
+        <ul>
+          <li>Booking calendar &amp; player app listing</li>
+          <li>Online payments, fee-splitting</li>
+          <li>Basic occupancy reports</li>
+        </ul>
+        <a class="btn ghost" href="#" aria-disabled="true" tabindex="-1">Coming soon</a>
+      </div>
+      <div class="tier featured">
+        <span class="t-badge">Most popular</span>
+        <h3>Club</h3>
+        <p class="t-for">Up to 10 courts</p>
+        <p class="t-price">€24<small> /COURT/MO</small></p>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>Revenue analytics &amp; dynamic pricing</li>
+          <li>Waitlist backfill &amp; no-show protection</li>
+          <li>Tournaments &amp; americano organiser</li>
+        </ul>
+        <a class="btn" href="#" aria-disabled="true" tabindex="-1">Coming soon</a>
+      </div>
+      <div class="tier">
+        <h3>Chain</h3>
+        <p class="t-for">Multi-venue operators</p>
+        <p class="t-price">Custom<small> PRICING</small></p>
+        <ul>
+          <li>Everything in Club</li>
+          <li>Cross-venue reporting &amp; roles</li>
+          <li>API access &amp; priority support</li>
+        </ul>
+        <a class="btn ghost" href="#" aria-disabled="true" tabindex="-1">Coming soon</a>
+      </div>
+    </div>
+    <p class="tiers-note">Pricing revealed at launch — competitive, per court, no lock-in</p>
+  </div>
+</section>
+
+<section class="cta" id="download">
+  <div class="inner">
+    <h2>Your fourth player<br>is already waiting</h2>
+    <p>Join thousands of players filling courts every evening. Set your level with one placement match and get your first game this week.</p>
+    <a class="btn" href="#">Download PADELMATCH.XYZ — free</a>
   </div>
 </section>
 
 <footer>
-  <div class="footer-logo">padelmatch.xyz</div>
-  <div class="footer-links">
-    <a href="#">About</a>
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
-    <a href="#">Support</a>
-    <a href="#managers">Court Managers</a>
-  </div>
-  <div class="footer-copy">© 2026 padelmatch.xyz. All rights reserved.</div>
+  <span class="logo" style="font-size:1.05rem"><span class="dot"></span><span>PADELMATCH<span style="color:var(--ball)">.XYZ</span></span></span>
+  <span class="mono">© 2026 PADELMATCH.XYZ · Terms · Privacy · hello@padelmatch.xyz</span>
 </footer>
 
 <script>
-  // Set this to your deployed Cloudflare Worker URL after setup (see worker/waitlist.js)
-  const WAITLIST_API_URL = 'https://padelmatch-waitlist.eliasnemr.workers.dev';
-
-  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  function setWaitlistMessage(form, text, type) {
-    const msg = form.querySelector('[data-waitlist-msg]');
-    if (!msg) return;
-    msg.hidden = !text;
-    msg.textContent = text;
-    msg.className = 'waitlist-msg' + (type ? ' is-' + type : '');
+  // respect reduced-motion for the SVG ball animation
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.querySelector('.court-svg')?.pauseAnimations();
   }
 
-  document.querySelectorAll('[data-waitlist-form]').forEach((form) => {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const input = form.querySelector('input[type="email"]');
-      const btn = form.querySelector('button[type="submit"]');
-      const email = (input?.value || '').trim().toLowerCase();
-
-      if (!EMAIL_RE.test(email)) {
-        setWaitlistMessage(form, 'Please enter a valid email address.', 'error');
-        return;
-      }
-
-      if (!WAITLIST_API_URL) {
-        setWaitlistMessage(form, 'Waitlist is not configured yet. Set WAITLIST_API_URL in index.html.', 'error');
-        return;
-      }
-
-      const prevLabel = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = 'Joining…';
-      setWaitlistMessage(form, '', '');
-
-      try {
-        const res = await fetch(WAITLIST_API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email,
-            source: form.dataset.source || 'landing',
-          }),
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          throw new Error(data.error || 'Something went wrong');
-        }
-        form.reset();
-        setWaitlistMessage(form, "You're on the list! We'll email you when the apps launch.", 'success');
-      } catch (err) {
-        setWaitlistMessage(form, err.message || 'Could not join waitlist. Try again.', 'error');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = prevLabel;
+  // animate skill bars when the level section scrolls into view
+  const fills = document.querySelectorAll('.fill');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        fills.forEach(f=>f.style.width=f.dataset.w);
+        io.disconnect();
       }
     });
-  });
-
-  function triggerWaitlistInputGlow() {
-    document.querySelectorAll('[data-waitlist-form] input[type="email"]').forEach((input) => {
-      input.classList.remove('waitlist-glow');
-      // re-trigger animation reliably
-      void input.offsetWidth;
-      input.classList.add('waitlist-glow');
-      window.setTimeout(() => input.classList.remove('waitlist-glow'), 950);
-    });
-  }
-
-  window.addEventListener('hero-ball-hit', () => {
-    triggerWaitlistInputGlow();
-  }, { once: true });
-
-  function launchFallingBalls() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    function go() {
-      window.heroPixi?.scheduleBallIntro?.();
-    }
-    if (window.heroPixi?.ready) go();
-    else window.addEventListener('hero-pixi-ready', go, { once: true });
-  }
-
-  window.addEventListener('load', launchFallingBalls, { once: true });
+  },{threshold:.35});
+  io.observe(document.querySelector('.level'));
 </script>
-<script src="https://cdn.jsdelivr.net/npm/pixi.js@8.9.1/dist/pixi.min.js"></script>
-<script src="hero-pixi.js"></script>
-
 </body>
 </html>
